@@ -1,0 +1,20 @@
+[package]
+name = "concourse-github-issue"
+version = "1.0.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+octocrab  = "0.29.0"
+concourse-resource = "0.3"
+tokio = { version = "1.29.1", features = ["rt-multi-thread", "macros"] }
+serde = "1.0.179"
+serde_json = "1.0.104"
+
+[profile.release]
+opt-level = 's'     # Optimize for size
+lto = true          # Enable link-time optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+panic = 'abort'     # Abort on panic
+strip = true        # Strip symbols from binary*

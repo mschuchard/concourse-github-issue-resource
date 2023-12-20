@@ -1,0 +1,27 @@
+---
+name: ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+    - 'src/*.rs'
+    - 'Cargo.toml'
+  pull_request:
+    branches: [main]
+    paths:
+    - 'src/*.rs'
+    - 'Cargo.toml'
+
+jobs:
+  rust-test:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: lint
+      run: cargo fmt -- --check
+    - name: build
+      run: cargo build
+    - name: test
+      run: cargo test
