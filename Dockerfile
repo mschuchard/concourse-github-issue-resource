@@ -1,4 +1,3 @@
-# TODO alpine https://github.com/ngerakines/pr-has-issues-action/blob/main/Dockerfile
 FROM rust:slim-bookworm as build
 WORKDIR /build
 COPY . .
