@@ -6,11 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-octocrab  = "0.29.0"
+octocrab  = "0.32.0"
 concourse-resource = "0.3"
-tokio = { version = "1.29.1", features = ["rt-multi-thread", "macros"] }
-serde = "1.0.179"
-serde_json = "1.0.104"
+tokio = { version = "1.35.1", features = ["rt-multi-thread", "macros"] }
+serde = "1.0.193"
+serde_json = "1.0.108"
 
 [profile.release]
 opt-level = 's'     # Optimize for size
