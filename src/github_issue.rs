@@ -17,7 +17,7 @@ fn str_to_issue_state(param: &str) -> octocrab::models::IssueState {
         "Open" => octocrab::models::IssueState::Open,
         "Closed" => octocrab::models::IssueState::Closed,
         "All" => {
-            println!("All was specified for issue state, and this can only be utilized with issue filtering and not updating");
+            println!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
             println!("this warning is only valid if the current step is a out/put");
             octocrab::models::IssueState::Open
         }
@@ -75,7 +75,7 @@ impl Issue {
         state_str: Option<&str>,
         milestone: Option<u64>,
     ) -> Self {
-        // convert state from string to IssueState TODO if update, otherwise if list convert to params state
+        // convert state from string to IssueState
         let state = match state_str {
             Some(state_str) => Some(str_to_issue_state(state_str)),
             None => None,
@@ -123,7 +123,7 @@ impl Issue {
         let issue = match action {
             // create an issue
             Action::Create => self.create(issues).await?,
-            // list issues TODO
+            // list issues
             Action::List => return Err("list operation currently not interfaced"),
             // read an issue state
             Action::Read => self.read(issues).await?,
@@ -228,8 +228,6 @@ impl Issue {
             let assignee = &self.assignees.as_ref().unwrap()[0][..];
             issue_page = issue_page.assignee(assignee);
         }
-        // TODO default to current user? octocrab has current auth
-        // TODO requires converting Option<Vec<String>> to &'d impl AsRef<[String]> + ?Sized which is horrendous
         /*if self.labels.is_some() {
             let labels = self.labels.clone().unwrap();
             issue_page = issue_page.labels(&labels[..]);
@@ -285,7 +283,6 @@ impl Issue {
                 if self.milestone.is_some() {
                     issue = issue.milestone(self.milestone.unwrap());
                 }
-                // TODO requires converting Option<Vec<String>> to &'e impl AsRef<[String]> + ?Sized which is horrendous
                 /*if self.labels.is_some() {
                     let labels = self.labels.clone().unwrap();
                     issue = issue.labels(&labels[..]);
@@ -430,6 +427,6 @@ mod tests {
         rt.block_on(test);
     }
 
-    #[test] //TODO
+    #[test]
     fn test_issue_main_list() {}
 }
