@@ -3,12 +3,12 @@ name: ci
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
     - 'src/*.rs'
     - 'Cargo.toml'
   pull_request:
-    branches: [main]
+    branches: [master]
     paths:
     - 'src/*.rs'
     - 'Cargo.toml'

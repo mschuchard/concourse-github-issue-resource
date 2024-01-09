@@ -19,6 +19,7 @@ fn str_to_issue_state(param: &str) -> octocrab::models::IssueState {
         "All" => {
             println!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
             println!("this warning is only valid if the current step is a out/put");
+            println!("the issue state will be reset to 'Open'");
             octocrab::models::IssueState::Open
         }
         &_ => panic!("the issue state must be either Open or Closed"),
@@ -49,8 +50,10 @@ pub(crate) struct Issue {
     assignees: Option<Vec<String>>,
     // read and update
     number: Option<u64>,
-    // update and list
-    state: Option<octocrab::models::IssueState>,
+    // update
+    issue_state: Option<octocrab::models::IssueState>,
+    // list
+    // params_state: Option<octocrab::params::State>,
     // create, list, and update
     milestone: Option<u64>,
 }
@@ -76,8 +79,13 @@ impl Issue {
         milestone: Option<u64>,
     ) -> Self {
         // convert state from string to IssueState
-        let state = match state_str {
+        let issue_state = match state_str {
             Some(state_str) => Some(str_to_issue_state(state_str)),
+            None => None,
+        };
+        // convert state from string to params State
+        let params_state = match state_str {
+            Some(state_str) => Some(str_to_params_state(state_str)),
             None => None,
         };
         // type conversion traits
@@ -93,7 +101,8 @@ impl Issue {
             labels,
             assignees,
             number,
-            state,
+            issue_state,
+            //params_state,
             milestone,
         }
     }
@@ -277,8 +286,8 @@ impl Issue {
                 if self.body.is_some() {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
-                if self.state.is_some() {
-                    issue = issue.state(self.state.clone().unwrap());
+                if self.issue_state.is_some() {
+                    issue = issue.state(self.issue_state.clone().unwrap());
                 }
                 if self.milestone.is_some() {
                     issue = issue.milestone(self.milestone.unwrap());
@@ -364,7 +373,8 @@ mod tests {
                 labels: None,
                 assignees: None,
                 number: Some(100),
-                state: None,
+                issue_state: None,
+                //params_state: None,
                 milestone: None
             },
             "failed to construct Issue for read"
@@ -393,7 +403,8 @@ mod tests {
                 labels: Some(vec![String::from("label")]),
                 assignees: Some(vec![String::from("assignee")]),
                 number: None,
-                state: None,
+                issue_state: None,
+                //params_state: None,
                 milestone: None
             },
             "failed to construct Issue for create"
