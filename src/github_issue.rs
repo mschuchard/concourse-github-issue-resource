@@ -233,9 +233,10 @@ impl Issue {
             issue_page = issue_page.milestone(self.milestone.unwrap());
         }
         if self.assignees.is_some() {
-            // assign value of first assignee and use for assignee filter
-            let assignee = &self.assignees.as_ref().unwrap()[0][..];
-            issue_page = issue_page.assignee(assignee);
+            // iterate through each assignee
+            for assignee in self.assignees.as_ref().unwrap().iter() {
+                issue_page = issue_page.assignee(&assignee[..]);
+            }
         }
         /*if self.labels.is_some() {
             let labels = self.labels.clone().unwrap();
@@ -449,7 +450,7 @@ mod tests {
                 None,
                 None,
                 None,
-                None,
+                Some(vec![String::from("blarghmatey"), String::from("pdpinch")]),
                 None,
                 None,
                 None,
@@ -457,7 +458,7 @@ mod tests {
             let issue = gh_issue.main(Action::List).await;
             assert_eq!(
                 issue.unwrap().state,
-                octocrab::models::IssueState::Closed,
+                octocrab::models::IssueState::Open,
                 "single issue of multiple listed from mitodl/ol-infrastructure not returned correctly",
             );
         };
