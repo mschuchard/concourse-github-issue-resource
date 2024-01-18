@@ -133,7 +133,7 @@ impl Issue {
             // create an issue
             Action::Create => self.create(issues).await?,
             // list issues
-            Action::List => return Err("list operation currently not interfaced"),
+            Action::List => self.list(issues).await?,
             // read an issue state
             Action::Read => self.read(issues).await?,
             // update an issue
@@ -431,7 +431,7 @@ mod tests {
             assert_eq!(
                 issue.unwrap().state,
                 octocrab::models::IssueState::Closed,
-                "first issue from mitodl/ol-infrastructure not read and returned correctly",
+                "hundredth issue from mitodl/ol-infrastructure not read and returned correctly",
             );
         };
         let rt = tokio::runtime::Runtime::new().unwrap();
@@ -439,5 +439,29 @@ mod tests {
     }
 
     #[test]
-    fn test_issue_main_list() {}
+    fn test_issue_main_list() {
+        // validate one issue of multiple listed returned from main
+        let test = async {
+            let gh_issue = Issue::new(
+                None,
+                "mitodl",
+                "ol-infrastructure",
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            );
+            let issue = gh_issue.main(Action::List).await;
+            assert_eq!(
+                issue.unwrap().state,
+                octocrab::models::IssueState::Closed,
+                "single issue of multiple listed from mitodl/ol-infrastructure not returned correctly",
+            );
+        };
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(test);
+    }
 }
