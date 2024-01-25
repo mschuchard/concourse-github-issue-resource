@@ -206,7 +206,6 @@ impl<'issue> Issue<'issue> {
     }
 
     // list github issues according to configuration
-    // https://docs.rs/octocrab/latest/octocrab/issues/struct.ListIssuesBuilder.html
     async fn list<'octo>(
         &self,
         issues: octocrab::issues::IssueHandler<'octo>,
@@ -214,10 +213,10 @@ impl<'issue> Issue<'issue> {
         // build the issue pages
         let mut issue_page = issues.list();
         // ... with optional parameters
-        /*if self.state.is_some() {
+        if self.state.is_some() {
             let params_state = str_to_params_state(self.state.unwrap());
             issue_page = issue_page.state(params_state);
-        }*/
+        }
         if self.milestone.is_some() {
             issue_page = issue_page.milestone(self.milestone.unwrap());
         }
@@ -442,7 +441,7 @@ mod tests {
                 None,
                 Some(vec![String::from("blarghmatey"), String::from("pdpinch")]),
                 None,
-                None,
+                Some("Open"),
                 None,
             );
             let issue = gh_issue.main(Action::List).await;
