@@ -38,7 +38,7 @@ fn str_to_params_state(param: &str) -> octocrab::params::State {
 // struct for general interfacing with module
 // the types correspond to octocrab when not advantageous otherwise
 #[derive(Eq, PartialEq, Debug)]
-pub(crate) struct Issue {
+pub(crate) struct Issue<'issue> {
     // client and issues: OctocrabBuilder and issues::IssueHandler
     pat: Option<String>,
     owner: String,
@@ -50,15 +50,13 @@ pub(crate) struct Issue {
     assignees: Option<Vec<String>>,
     // read and update
     number: Option<u64>,
-    // update
-    issue_state: Option<octocrab::models::IssueState>,
-    // list
-    // params_state: Option<octocrab::params::State>,
+    // update octocrab::models::IssueState and list octocrab::params::State
+    state: Option<&'issue str>,
     // create, list, and update
     milestone: Option<u64>,
 }
 
-impl Issue {
+impl<'issue> Issue<'issue> {
     /// Constructor for the Config struct. Contains all of the members necessary for instantiating a client and performing an action.
     ///
     /// # Examples
@@ -75,19 +73,9 @@ impl Issue {
         labels: Option<Vec<String>>,
         assignees: Option<Vec<String>>,
         number: Option<u64>,
-        state_str: Option<&str>,
+        state: Option<&'issue str>,
         milestone: Option<u64>,
     ) -> Self {
-        // convert state from string to IssueState
-        let issue_state = match state_str {
-            Some(state_str) => Some(str_to_issue_state(state_str)),
-            None => None,
-        };
-        // convert state from string to params State
-        let params_state = match state_str {
-            Some(state_str) => Some(str_to_params_state(state_str)),
-            None => None,
-        };
         // type conversion traits
         let owner = owner.into();
         let repo = repo.into();
@@ -101,7 +89,7 @@ impl Issue {
             labels,
             assignees,
             number,
-            issue_state,
+            state,
             //params_state,
             milestone,
         }
@@ -227,7 +215,8 @@ impl Issue {
         let mut issue_page = issues.list();
         // ... with optional parameters
         /*if self.state.is_some() {
-            issue_page = issue_page.state(self.state.clone().unwrap());
+            let params_state = str_to_params_state(self.state.unwrap());
+            issue_page = issue_page.state(params_state);
         }*/
         if self.milestone.is_some() {
             issue_page = issue_page.milestone(self.milestone.unwrap());
@@ -287,8 +276,9 @@ impl Issue {
                 if self.body.is_some() {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
-                if self.issue_state.is_some() {
-                    issue = issue.state(self.issue_state.clone().unwrap());
+                if self.state.is_some() {
+                    let issue_state = str_to_issue_state(self.state.unwrap());
+                    issue = issue.state(issue_state);
                 }
                 if self.milestone.is_some() {
                     issue = issue.milestone(self.milestone.unwrap());
@@ -374,7 +364,7 @@ mod tests {
                 labels: None,
                 assignees: None,
                 number: Some(100),
-                issue_state: None,
+                state: None,
                 //params_state: None,
                 milestone: None
             },
@@ -404,7 +394,7 @@ mod tests {
                 labels: Some(vec![String::from("label")]),
                 assignees: Some(vec![String::from("assignee")]),
                 number: None,
-                issue_state: None,
+                state: None,
                 //params_state: None,
                 milestone: None
             },
