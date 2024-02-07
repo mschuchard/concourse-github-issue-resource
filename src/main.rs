@@ -133,6 +133,7 @@ impl concourse_resource::Resource for GithubIssue {
                 issue.number,
                 issue.labels,
                 issue.assignees,
+                issue.milestone,
             )),
         }
     }

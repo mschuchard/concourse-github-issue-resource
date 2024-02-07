@@ -95,6 +95,7 @@ pub(crate) struct OutMetadata {
     number: u64,
     labels: Vec<octocrab::models::Label>,
     assignees: Vec<octocrab::models::Author>,
+    milestone: Option<octocrab::models::Milestone>,
 }
 
 impl OutMetadata {
@@ -103,17 +104,19 @@ impl OutMetadata {
     /// # Examples
     ///
     /// ```
-    /// let metadata = OutMetadata::new(10, !vec[String::from("triage")], !vec[String::from("myuser")];
+    /// let metadata = OutMetadata::new(10, !vec[String::from("triage")], !vec[String::from("myuser")], 3); // this is inaccurate re: struct models
     /// ```
     pub(crate) fn new(
         number: u64,
         labels: Vec<octocrab::models::Label>,
         assignees: Vec<octocrab::models::Author>,
+        milestone: Option<octocrab::models::Milestone>,
     ) -> Self {
         OutMetadata {
             number,
             labels,
             assignees,
+            milestone,
         }
     }
 }

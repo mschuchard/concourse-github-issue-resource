@@ -90,7 +90,6 @@ impl<'issue> Issue<'issue> {
             assignees,
             number,
             state,
-            //params_state,
             milestone,
         }
     }
