@@ -17,7 +17,7 @@ This repository and project is based on the work performed for [MITODL](https://
 
 - `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state. If this is omitted then the `check` step is skipped.
 
-- `milestone`: _optional_ The milestone number to associate with the issue during creation. This is within `source` and not `params` because it may also be used with `check` in the future.
+- `milestone`: _optional_ currently not interfaced between frontend and backend
 
 ### `version`: designates the Github issue state
 
@@ -58,6 +58,8 @@ The `out` step creates a Github issue according to the input parameters below. T
 - `labels`: _optional_ A list of labels for the Github issue.
 
 - `assignees`: _optional_ A list of assignees for the Github issue.
+
+- `milestone`: _optional_ The milestone number to associate with the issue during creation.
 
 ## Example
 

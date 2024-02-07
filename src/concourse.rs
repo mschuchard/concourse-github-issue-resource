@@ -35,7 +35,7 @@ pub(crate) struct Source {
     repo: String,
     // read and update
     number: Option<u64>,
-    // create, list, and update
+    // list
     milestone: Option<u64>,
 }
 
@@ -67,6 +67,7 @@ pub(crate) struct OutParams {
     body: Option<String>,
     labels: Option<Vec<String>>,
     assignees: Option<Vec<String>>,
+    milestone: Option<u64>,
 }
 
 impl OutParams {
@@ -82,6 +83,9 @@ impl OutParams {
     }
     pub(crate) fn assignees(&self) -> Option<Vec<String>> {
         return self.assignees.clone();
+    }
+    pub(crate) fn milestone(&self) -> Option<u64> {
+        return self.milestone.clone();
     }
 }
 
@@ -187,6 +191,7 @@ mod tests {
                 body: None,
                 labels: None,
                 assignees: None,
+                milestone: None,
             }
             .title,
             String::from("mytitle"),
@@ -199,7 +204,8 @@ mod tests {
 {
     "title": "my_issue",
     "body": "approve the concourse step",
-    "assignees": ["my_user_one", "my_user_two"]
+    "assignees": ["my_user_one", "my_user_two"],
+    "milestone": 2
 }"#;
         let out_params = serde_json::from_str::<OutParams>(json_input)
             .expect("outparams could not be deserialized");
@@ -213,6 +219,7 @@ mod tests {
                     String::from("my_user_one"),
                     String::from("my_user_two")
                 ]),
+                milestone: Some(2),
             },
             "out params did not contain the expected member values",
         )
