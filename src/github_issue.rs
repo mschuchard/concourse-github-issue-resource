@@ -18,7 +18,6 @@ fn str_to_issue_state(param: &str) -> octocrab::models::IssueState {
         "Closed" => octocrab::models::IssueState::Closed,
         "All" => {
             println!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
-            println!("this warning is only valid if the current step is a out/put");
             println!("the issue state will be reset to 'Open'");
             octocrab::models::IssueState::Open
         }

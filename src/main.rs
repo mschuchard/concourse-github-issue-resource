@@ -21,19 +21,11 @@ impl concourse_resource::Resource for GithubIssue {
         source: Option<Self::Source>,
         _version: Option<Self::Version>,
     ) -> Vec<Self::Version> {
-        // validate and re-assign source
+        // validate and unwrap source
         let source = match source {
             Some(source) => source,
             None => panic!("source is required for the Github Issue resource"),
         };
-
-        // if no number is specified in source then this resource execution should skip the check step and cannot trigger
-        if source.number().is_none() {
-            println!(
-                "no issue number was specified in source, and therefore the check step is skipped"
-            );
-            return vec![concourse::Version::new(String::from("Open"))];
-        }
 
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
@@ -42,14 +34,19 @@ impl concourse_resource::Resource for GithubIssue {
             source.repo(),
             None,
             None,
-            None,
-            None,
+            source.labels(),
+            source.assignees(),
             source.number(),
-            None,
-            None,
+            None, //source.state(),
+            source.milestone(),
         );
+        // ...determine the action...
+        let action = match source.number() {
+            Some(_) => github_issue::Action::Read,
+            None => github_issue::Action::List,
+        };
         // ...and read the octocrab github issue
-        let issue = match gh_issue.main(github_issue::Action::Read).await {
+        let issue = match gh_issue.main(action).await {
             Ok(issue) => issue,
             Err(error) => {
                 println!("{error}");
