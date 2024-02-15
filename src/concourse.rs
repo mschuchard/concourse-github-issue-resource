@@ -33,10 +33,13 @@ pub(crate) struct Source {
     pat: Option<String>,
     owner: String,
     repo: String,
-    // read and update
+    // read
     number: Option<u64>,
     // list
+    state: Option<String>,
     milestone: Option<u64>,
+    assignees: Option<Vec<String>>,
+    labels: Option<Vec<String>>,
 }
 
 impl Source {
@@ -53,8 +56,17 @@ impl Source {
     pub(crate) fn number(&self) -> Option<u64> {
         return self.number;
     }
+    pub(crate) fn state(&self) -> Option<String> {
+        return self.state.clone();
+    }
     pub(crate) fn milestone(&self) -> Option<u64> {
         return self.milestone;
+    }
+    pub(crate) fn assignees(&self) -> Option<Vec<String>> {
+        return self.assignees.clone();
+    }
+    pub(crate) fn labels(&self) -> Option<Vec<String>> {
+        return self.labels.clone();
     }
 }
 
@@ -155,8 +167,11 @@ mod tests {
                 pat: None,
                 owner: String::from("myorg"),
                 repo: String::from("myrepo"),
+                state: Some(String::from("All")),
                 number: None,
-                milestone: None
+                milestone: None,
+                assignees: None,
+                labels: None,
             }
             .owner,
             String::from("myorg"),
@@ -169,7 +184,8 @@ mod tests {
 {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
-    "number": 1
+    "number": 1,
+    "state": "Open"
 }"#;
         let source =
             serde_json::from_str::<Source>(json_input).expect("source could not be deserialized");
@@ -180,7 +196,10 @@ mod tests {
                 owner: String::from("mitodl"),
                 repo: String::from("ol-infrastructure"),
                 number: Some(1),
+                state: Some(String::from("Open")),
                 milestone: None,
+                assignees: None,
+                labels: None,
             },
             "source did not contain the expected member values",
         )
