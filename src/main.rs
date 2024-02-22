@@ -35,7 +35,7 @@ impl concourse_resource::Resource for GithubIssue {
             None,
             None,
             source.labels(),
-            source.assignees(),
+            source.assignee(),
             source.number(),
             None, //source.state(),
             source.milestone(),
@@ -186,7 +186,7 @@ mod tests {
 {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
-    "assignees": ["blarghmatey", "pdpinch"]
+    "assignee": "pdpinch"
 }"#;
         let version_input = r#"
 {

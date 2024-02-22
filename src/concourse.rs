@@ -38,7 +38,7 @@ pub(crate) struct Source {
     // list
     state: Option<String>,
     milestone: Option<u64>,
-    assignees: Option<Vec<String>>,
+    assignee: Option<String>,
     labels: Option<Vec<String>>,
 }
 
@@ -62,8 +62,12 @@ impl Source {
     pub(crate) fn milestone(&self) -> Option<u64> {
         return self.milestone;
     }
-    pub(crate) fn assignees(&self) -> Option<Vec<String>> {
-        return self.assignees.clone();
+    pub(crate) fn assignee(&self) -> Option<Vec<String>> {
+        // convert assignee to single element string vector for compatibility with github issue constructor
+        return match self.assignee.clone() {
+            Some(assignee) => Some(vec![assignee]),
+            None => None,
+        };
     }
     pub(crate) fn labels(&self) -> Option<Vec<String>> {
         return self.labels.clone();
@@ -170,7 +174,7 @@ mod tests {
                 state: Some(String::from("All")),
                 number: None,
                 milestone: None,
-                assignees: None,
+                assignee: None,
                 labels: None,
             }
             .owner,
@@ -198,7 +202,7 @@ mod tests {
                 number: Some(1),
                 state: Some(String::from("Open")),
                 milestone: None,
-                assignees: None,
+                assignee: None,
                 labels: None,
             },
             "source did not contain the expected member values",
