@@ -212,6 +212,7 @@ impl<'issue> Issue<'issue> {
         let mut issue_page = issues.list();
         // ... with optional parameters
         if self.state.is_some() {
+            // convert str state to params state
             let params_state = str_to_params_state(self.state.unwrap());
             issue_page = issue_page.state(params_state);
         }
@@ -219,10 +220,16 @@ impl<'issue> Issue<'issue> {
             issue_page = issue_page.milestone(self.milestone.unwrap());
         }
         if self.assignees.is_some() {
-            // iterate through each assignee
-            for assignee in self.assignees.as_ref().unwrap().iter() {
-                issue_page = issue_page.assignee(&assignee[..]);
+            // assert only one assignee in assignees
+            let num_assignees = self.assignees.as_ref().unwrap().len();
+            if num_assignees != 1 {
+                println!("list action attempted with other than one assignee: {num_assignees}");
+                println!("this is an error with frontend and backend interfacing, and should be reported");
+                return Err("multiple assignees and list action");
             }
+            // assign value of only assignee and use for assignee filter
+            let assignee = &self.assignees.as_ref().unwrap()[0][..];
+            issue_page = issue_page.assignee(assignee);
         }
         /*if self.labels.is_some() {
             let labels = self.labels.clone().unwrap();
@@ -274,6 +281,7 @@ impl<'issue> Issue<'issue> {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
                 if self.state.is_some() {
+                    // convert str state to issue_state
                     let issue_state = str_to_issue_state(self.state.unwrap());
                     issue = issue.state(issue_state);
                 }
@@ -437,7 +445,7 @@ mod tests {
                 None,
                 None,
                 None,
-                Some(vec![String::from("blarghmatey"), String::from("pdpinch")]),
+                Some(vec![String::from("pdpinch")]),
                 None,
                 Some("Open"),
                 None,
