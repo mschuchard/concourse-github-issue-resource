@@ -146,7 +146,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_resource_check() {
+    fn test_resource_check_read() {
         // validate basic check reading from mitodl/ol-infrastructure issue 1
         // concourse pipeline json input
         let source_input = r#"
@@ -175,6 +175,39 @@ mod tests {
                 version_vec,
                 vec![concourse::Version::new(String::from("Open")), concourse::Version::new(String::from("Closed"))],
                 "the resource_check did not return a two size vector of issue states for a closed issue",
+            );
+    }
+
+    #[test]
+    fn test_resource_check_list() {
+        // validate basic check listing from mitodl/ol-infrastructure and filtering to issue 497
+        // concourse pipeline json input
+        let source_input = r#"
+{
+    "owner": "mitodl",
+    "repo": "ol-infrastructure",
+    "assignees": ["blarghmatey", "pdpinch"]
+}"#;
+        let version_input = r#"
+{
+    "state": "Open"
+}"#;
+        // deserialize version and source for inputs
+        let source = serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Source>(
+            source_input,
+        )
+        .expect("source could not be deserialized");
+        let version =
+            serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Version>(
+                version_input,
+            )
+            .expect("version could not be deserialized");
+        let version_vec = GithubIssue::resource_check(Some(source), Some(version));
+        // the issue is closed so we expect a size two vec
+        assert_eq!(
+                version_vec,
+                vec![concourse::Version::new(String::from("Open"))],
+                "the resource_check did not return a one size vector of issue states for an open issue",
             );
     }
 

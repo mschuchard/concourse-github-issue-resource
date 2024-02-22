@@ -444,9 +444,9 @@ mod tests {
             );
             let issue = gh_issue.main(Action::List).await;
             assert_eq!(
-                issue.unwrap().state,
-                octocrab::models::IssueState::Open,
-                "single issue of multiple listed from mitodl/ol-infrastructure not returned correctly",
+                issue.unwrap().number,
+                497,
+                "single issue #497 from multiple listed from mitodl/ol-infrastructure not returned correctly",
             );
         };
         let rt = tokio::runtime::Runtime::new().unwrap();
