@@ -460,4 +460,39 @@ mod tests {
         let rt = tokio::runtime::Runtime::new().unwrap();
         rt.block_on(test);
     }
+
+    #[test]
+    fn test_errors() {
+        // validate errors
+        let test = async {
+            let gh_issue = Issue::new(
+                None,
+                "mitodl",
+                "ol-infrastructure",
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            );
+            // validate title required for create error
+            let issue = gh_issue.main(Action::Create).await;
+            assert_eq!(
+                issue,
+                Err("title unspecified"),
+                "attempted create without specified title did not error expectedly",
+            );
+            // validate issue number required for read
+            let issue_two = gh_issue.main(Action::Read).await;
+            assert_eq!(
+                issue_two,
+                Err("issue number unspecified"),
+                "attempted read without specified number did not error expectedly",
+            );
+        };
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(test);
+    }
 }
