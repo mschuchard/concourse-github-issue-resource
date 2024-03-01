@@ -205,10 +205,10 @@ mod tests {
         let version_vec = GithubIssue::resource_check(Some(source), Some(version));
         // the issue is closed so we expect a size two vec
         assert_eq!(
-                version_vec,
-                vec![concourse::Version::new(String::from("Open"))],
-                "the resource_check did not return a one size vector of issue states for an open issue",
-            );
+            version_vec,
+            vec![concourse::Version::new(String::from("Open"))],
+            "the resource_check did not return a one size vector of issue states for an open issue",
+        );
     }
 
     #[test]
