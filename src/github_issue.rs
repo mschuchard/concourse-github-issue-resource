@@ -12,25 +12,25 @@ pub(crate) enum Action {
 }
 
 // convert string to IssueState or params::State without trait implementations because not allowed
-fn str_to_issue_state(param: &str) -> octocrab::models::IssueState {
+fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
     match param {
-        "Open" => octocrab::models::IssueState::Open,
-        "Closed" => octocrab::models::IssueState::Closed,
+        "Open" => Ok(octocrab::models::IssueState::Open),
+        "Closed" => Ok(octocrab::models::IssueState::Closed),
         "All" => {
             println!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
             println!("the issue state will be reset to 'Open'");
-            octocrab::models::IssueState::Open
+            Ok(octocrab::models::IssueState::Open)
         }
-        &_ => panic!("the issue state must be either Open or Closed"),
+        &_ => Err("the issue state must be either Open or Closed"),
     }
 }
 
-fn str_to_params_state(param: &str) -> octocrab::params::State {
+fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
     match param {
-        "Open" => octocrab::params::State::Open,
-        "Closed" => octocrab::params::State::Closed,
-        "All" => octocrab::params::State::All,
-        &_ => panic!("the issue state must be either Open, Closed, or All"),
+        "Open" => Ok(octocrab::params::State::Open),
+        "Closed" => Ok(octocrab::params::State::Closed),
+        "All" => Ok(octocrab::params::State::All),
+        &_ => Err("the issue state must be either Open, Closed, or All"),
     }
 }
 
@@ -213,7 +213,7 @@ impl<'issue> Issue<'issue> {
         // ... with optional parameters
         if self.state.is_some() {
             // convert str state to params state
-            let params_state = str_to_params_state(self.state.unwrap());
+            let params_state = str_to_params_state(self.state.unwrap())?;
             issue_page = issue_page.state(params_state);
         }
         if self.milestone.is_some() {
@@ -282,7 +282,7 @@ impl<'issue> Issue<'issue> {
                 }
                 if self.state.is_some() {
                     // convert str state to issue_state
-                    let issue_state = str_to_issue_state(self.state.unwrap());
+                    let issue_state = str_to_issue_state(self.state.unwrap())?;
                     issue = issue.state(issue_state);
                 }
                 if self.milestone.is_some() {
@@ -326,22 +326,22 @@ mod tests {
         // validates issue open and closed conversions
         assert_eq!(
             str_to_issue_state("Open"),
-            octocrab::models::IssueState::Open,
+            Ok(octocrab::models::IssueState::Open),
             "failed to convert Open str to Open enum"
         );
 
         assert_eq!(
             str_to_issue_state("Closed"),
-            octocrab::models::IssueState::Closed,
+            Ok(octocrab::models::IssueState::Closed),
             "failed to convert Closed str to Closed enum"
         );
     }
     #[test]
     fn test_str_to_params_state() {
         // octocrab::params::State does not implement Eq
-        str_to_params_state("Open");
-        str_to_params_state("Closed");
-        str_to_params_state("All");
+        str_to_params_state("Open").unwrap();
+        str_to_params_state("Closed").unwrap();
+        str_to_params_state("All").unwrap();
     }
 
     #[test]

@@ -101,3 +101,8 @@ jobs:
         - your_user
   - get: githhub-issue-check
 ```
+
+## Contributing
+Code should pass all unit and acceptance tests. New features should involve new unit tests.
+
+Please consult the GitHub Project for the current development roadmap.
