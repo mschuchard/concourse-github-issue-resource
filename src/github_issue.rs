@@ -283,14 +283,6 @@ impl<'issue> Issue<'issue> {
                 if self.body.is_some() {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
-                if self.state.is_some() {
-                    // convert str state to issue_state
-                    let issue_state = str_to_issue_state(self.state.unwrap())?;
-                    issue = issue.state(issue_state);
-                }
-                if self.milestone.is_some() {
-                    issue = issue.milestone(self.milestone.unwrap());
-                }
                 /*if self.labels.is_some() {
                     let labels = self.labels.clone().unwrap();
                     issue = issue.labels(&labels[..]);
@@ -299,6 +291,14 @@ impl<'issue> Issue<'issue> {
                     let labels = self.assignees.clone().unwrap();
                     issue = issue.assignees(&assignees[..]);
                 }*/
+                if self.state.is_some() {
+                    // convert str state to issue_state
+                    let issue_state = str_to_issue_state(self.state.unwrap())?;
+                    issue = issue.state(issue_state);
+                }
+                if self.milestone.is_some() {
+                    issue = issue.milestone(self.milestone.unwrap());
+                }
                 // send and await the issue
                 match issue.send().await {
                     // return updated issue

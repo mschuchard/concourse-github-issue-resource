@@ -105,8 +105,8 @@ impl concourse_resource::Resource for GithubIssue {
             params.body(),
             params.labels(),
             params.assignees(),
-            None,
-            None,
+            source.number(),
+            None, //params.state(),
             params.milestone(),
         );
         // ...and create the octocrab github issue
