@@ -6,7 +6,7 @@ mod github_issue;
 struct GithubIssue {}
 
 impl concourse_resource::Resource for GithubIssue {
-    // implementtations for inputs and outputs
+    // implementations for inputs and outputs
     type Source = concourse::Source;
     type Version = concourse::Version;
     type InParams = concourse_resource::Empty;

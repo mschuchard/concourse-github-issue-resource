@@ -148,10 +148,13 @@ impl<'issue> Issue<'issue> {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
                 if self.labels.is_some() {
-                    issue = issue.labels(self.labels.clone().unwrap());
+                    issue = issue.labels(self.labels.clone());
                 }
                 if self.assignees.is_some() {
-                    issue = issue.labels(self.assignees.clone().unwrap());
+                    issue = issue.assignees(self.assignees.clone());
+                }
+                if self.milestone.is_some() {
+                    issue = issue.milestone(self.milestone);
                 }
                 // send and await the issue
                 match issue.send().await {
