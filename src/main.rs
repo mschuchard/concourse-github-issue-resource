@@ -27,6 +27,14 @@ impl concourse_resource::Resource for GithubIssue {
             None => panic!("source is required for the Github Issue resource"),
         };
 
+        // return immediately with two sized vector if check step skip requested (e.g. source for out/put+create)
+        if source.skip_check() {
+            return vec![
+                concourse::Version::new(String::from("Open")),
+                concourse::Version::new(String::from("Closed")),
+            ];
+        }
+
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
@@ -45,12 +53,12 @@ impl concourse_resource::Resource for GithubIssue {
             Some(_) => github_issue::Action::Read,
             None => github_issue::Action::List,
         };
-        // ...and read the octocrab github issue
+        // ...and return the octocrab github issue
         let issue = match gh_issue.main(action).await {
             Ok(issue) => issue,
             Err(error) => {
                 println!("{error}");
-                panic!("the check step was unable to read the specified github issue number");
+                panic!("the check step was unable to return a github issue from the source values");
             }
         };
 
@@ -58,7 +66,7 @@ impl concourse_resource::Resource for GithubIssue {
         match issue.state {
             octocrab::models::IssueState::Open => vec![concourse::Version::new(String::from("Open"))],
             octocrab::models::IssueState::Closed => vec![concourse::Version::new(String::from("Open")), concourse::Version::new(String::from("Closed"))],
-            _ => panic!("expected the github issue state to either be open or closed, and somehow it is something else")
+            _ => panic!("expected the github issue state to either be Open or Closed, and somehow it is something else")
         }
     }
 

@@ -40,6 +40,8 @@ pub(crate) struct Source {
     milestone: Option<u64>,
     assignee: Option<String>,
     labels: Option<Vec<String>>,
+    // for skipping check during e.g. put+create
+    skip_check: Option<bool>,
 }
 
 impl Source {
@@ -71,6 +73,13 @@ impl Source {
     }
     pub(crate) fn labels(&self) -> Option<Vec<String>> {
         return self.labels.clone();
+    }
+    // return unwrapped value with default false for ease of use
+    pub(crate) fn skip_check(&self) -> bool {
+        return match self.skip_check {
+            Some(skip_check) => skip_check,
+            None => false,
+        };
     }
 }
 
@@ -181,6 +190,7 @@ mod tests {
                 milestone: None,
                 assignee: None,
                 labels: None,
+                skip_check: None,
             }
             .owner,
             String::from("myorg"),
@@ -194,7 +204,8 @@ mod tests {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
     "number": 1,
-    "state": "Open"
+    "state": "Open",
+    "skip_check": false
 }"#;
         let source =
             serde_json::from_str::<Source>(json_input).expect("source could not be deserialized");
@@ -209,6 +220,7 @@ mod tests {
                 milestone: None,
                 assignee: None,
                 labels: None,
+                skip_check: Some(false),
             },
             "source did not contain the expected member values",
         )

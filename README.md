@@ -68,7 +68,7 @@ resource_types:
 - name: github_issue
   type: docker-image
   source:
-    repository: mitodl/concourse-github-isse-resource
+    repository: mitodl/concourse-github-issue-resource
     tag: latest
 
 resources:
@@ -78,6 +78,7 @@ resources:
     pat: abcdefg12345!
     owner: mitodl
     repo: ol-infrastructure
+    skip_check: true
 - name: github-issue-check
   type: github-issue
   source:
