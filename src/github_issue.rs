@@ -2,6 +2,8 @@
 //!
 //! `github_issue` is a minimal utility to create and update issues within Github.
 
+use log;
+
 // allowed operations for github issue interactions
 #[non_exhaustive]
 pub(crate) enum Action {
@@ -17,8 +19,8 @@ fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str>
         "Open" => Ok(octocrab::models::IssueState::Open),
         "Closed" => Ok(octocrab::models::IssueState::Closed),
         "All" => {
-            println!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
-            println!("the issue state will be reset to 'Open'");
+            log::warn!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
+            log::warn!("the issue state will be reset to 'Open'");
             Ok(octocrab::models::IssueState::Open)
         }
         &_ => Err("the issue state must be either Open or Closed"),
@@ -162,15 +164,15 @@ impl<'issue> Issue<'issue> {
                     Ok(issue) => return Ok(issue),
                     // issue could not be created
                     Err(error) => {
-                        println!("the issue could not be created");
-                        println!("{error}");
+                        log::error!("the issue could not be created");
+                        log::error!("{error}");
                         return Err("issue not created");
                     }
                 }
             }
             // title unspecified
             None => {
-                println!("a title was not specified, and so an issue could not be created");
+                log::error!("a title was not specified, and so an issue could not be created");
                 return Err("title unspecified");
             }
         }
@@ -190,17 +192,19 @@ impl<'issue> Issue<'issue> {
                     Ok(issue) => return Ok(issue),
                     // issue number probably does not exist, or some other error
                     Err(error) => {
-                        println!(
+                        log::error!(
                             "the issue number {number} could not be retrieved from the repository"
                         );
-                        println!("{error}");
+                        log::error!("{error}");
                         return Err("unknown issue");
                     }
                 };
             }
             // issue number unspecified
             None => {
-                println!("an issue number was not specified, and so its state cannot be retrieved");
+                log::error!(
+                    "an issue number was not specified, and so its state cannot be retrieved"
+                );
                 return Err("issue number unspecified");
             }
         }
@@ -226,8 +230,8 @@ impl<'issue> Issue<'issue> {
             // assert only one assignee in assignees
             let num_assignees = self.assignees.as_ref().unwrap().len();
             if num_assignees != 1 {
-                println!("list action attempted with other than one assignee: {num_assignees}");
-                println!("this is an error with frontend and backend interfacing, and should be reported");
+                log::error!("list action attempted with other than one assignee: {num_assignees}");
+                log::error!("this is an error with frontend and backend interfacing, and should be reported");
                 return Err("multiple assignees and list action");
             }
             // assign value of only assignee and use for assignee filter
@@ -244,10 +248,10 @@ impl<'issue> Issue<'issue> {
             Ok(page) => page,
             // issues probably do not exist with given filters, or some other error
             Err(error) => {
-                println!(
+                log::error!(
                     "the issues with the given filters could not be retrieved from the repository"
                 );
-                println!("{error}");
+                log::error!("{error}");
                 return Err("unknown issues");
             }
         };
@@ -258,8 +262,8 @@ impl<'issue> Issue<'issue> {
             1 => return Ok(vec_issues[0].clone()),
             _ => {
                 let num = vec_issues.len();
-                println!("expected only one issue to be returned from filtered list");
-                println!("actual number of issues returned was {num}");
+                log::error!("expected only one issue to be returned from filtered list");
+                log::error!("actual number of issues returned was {num}");
                 return Err("unexpected number of issues");
             }
         }
@@ -305,15 +309,17 @@ impl<'issue> Issue<'issue> {
                     Ok(issue) => return Ok(issue),
                     // issue number probably does not exist, or some other error
                     Err(error) => {
-                        println!("the issue number {number} could not be updated");
-                        println!("{error}");
+                        log::error!("the issue number {number} could not be updated");
+                        log::error!("{error}");
                         return Err("issue not updated");
                     }
                 }
             }
             // issue number unspecified
             None => {
-                println!("an issue number was not specified, and so an issue could not be updated");
+                log::error!(
+                    "an issue number was not specified, and so an issue could not be updated"
+                );
                 return Err("issue number unspecified");
             }
         }

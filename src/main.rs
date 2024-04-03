@@ -1,4 +1,5 @@
 use concourse_resource::*;
+use log;
 
 mod concourse;
 mod github_issue;
@@ -57,7 +58,7 @@ impl concourse_resource::Resource for GithubIssue {
         let issue = match gh_issue.main(action).await {
             Ok(issue) => issue,
             Err(error) => {
-                println!("{error}");
+                log::error!("{error}");
                 panic!("the check step was unable to return a github issue from the source values");
             }
         };
@@ -121,7 +122,7 @@ impl concourse_resource::Resource for GithubIssue {
         let issue = match gh_issue.main(github_issue::Action::Create).await {
             Ok(issue) => issue,
             Err(error) => {
-                println!("{error}");
+                log::error!("{error}");
                 panic!("the out/put step was unable to create the associated github issue");
             }
         };
