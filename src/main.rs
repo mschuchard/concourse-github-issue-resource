@@ -30,6 +30,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return immediately with two sized vector if check step skip requested (e.g. source for out/put+create)
         if source.skip_check() {
+            log::info!("the check step will be skipped because 'skip_check' was set to true in source");
             return vec![
                 concourse::Version::new(String::from("Open")),
                 concourse::Version::new(String::from("Closed")),
@@ -62,6 +63,7 @@ impl concourse_resource::Resource for GithubIssue {
                 panic!("the check step was unable to return a github issue from the source values");
             }
         };
+        log::info!("the github issue information was successfully retrieved");
 
         // return one sized version vector if issue is open and two sized if closed
         match issue.state {
@@ -82,6 +84,7 @@ impl concourse_resource::Resource for GithubIssue {
         concourse_resource::InOutput<Self::Version, Self::InMetadata>,
         Box<dyn std::error::Error>,
     > {
+        log::info!("reminder: the in step is only to be used for an efficient check step with minimal overhead");
         Ok(concourse_resource::InOutput {
             version: concourse::Version::new(String::from("Open")),
             metadata: None,
@@ -98,6 +101,7 @@ impl concourse_resource::Resource for GithubIssue {
         // validate source and params
         let source = match source {
             Some(source) => source,
+            // note it would be bizarre if this was ever reached since it is already validated in check
             None => panic!("source is required for the Github Issue resource"),
         };
         let params = match params {
@@ -126,11 +130,13 @@ impl concourse_resource::Resource for GithubIssue {
                 panic!("the out/put step was unable to create the associated github issue");
             }
         };
+        log::info!("the github issue was successfully created");
 
         // store issue number in file for subsequent check step
         let file_path = format!("{input_path}/issue_number.txt");
         std::fs::write(file_path, issue.number.to_string())
             .expect("issue number could not be written to {file_path}");
+        log::info!("the issue number was stored in a file at '{input_path}/issue_number.txt'");
 
         // return out step output
         concourse_resource::OutOutput {

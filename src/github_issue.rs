@@ -120,7 +120,7 @@ impl<'issue> Issue<'issue> {
         let issue = match action {
             // create an issue
             Action::Create => self.create(issues).await?,
-            // list issues
+            // list issues and filter to one issue
             Action::List => self.list(issues).await?,
             // read an issue state
             Action::Read => self.read(issues).await?,
