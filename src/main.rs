@@ -1,5 +1,6 @@
 use concourse_resource::*;
 use log;
+use env_logger;
 
 mod concourse;
 mod github_issue;
@@ -22,6 +23,9 @@ impl concourse_resource::Resource for GithubIssue {
         source: Option<Self::Source>,
         _version: Option<Self::Version>,
     ) -> Vec<Self::Version> {
+        // init logger
+        _ = env_logger::try_init();
+
         // validate and unwrap source
         let source = match source {
             Some(source) => source,
@@ -84,6 +88,9 @@ impl concourse_resource::Resource for GithubIssue {
         concourse_resource::InOutput<Self::Version, Self::InMetadata>,
         Box<dyn std::error::Error>,
     > {
+        // init logger
+        _ = env_logger::try_init();
+
         log::info!("reminder: the in step is only to be used for an efficient check step with minimal overhead");
         Ok(concourse_resource::InOutput {
             version: concourse::Version::new(String::from("Open")),
@@ -98,6 +105,9 @@ impl concourse_resource::Resource for GithubIssue {
         params: Option<Self::OutParams>,
         input_path: &str,
     ) -> concourse_resource::OutOutput<Self::Version, Self::OutMetadata> {
+        // init logger
+        _ = env_logger::try_init();
+
         // validate source and params
         let source = match source {
             Some(source) => source,
