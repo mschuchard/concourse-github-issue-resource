@@ -13,7 +13,7 @@ pub(crate) enum Action {
     Update,
 }
 
-// convert string to IssueState or params::State without trait implementations because not allowed
+// convert string to IssueState or params::State without trait implementations because not allowed (no impl Into<octocrab::models::IssueState> for &str)
 fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
     match param {
         "Open" => Ok(octocrab::models::IssueState::Open),

@@ -15,9 +15,19 @@ This repository and project is based on the work performed for [MITODL](https://
 
 - `repo`: _required_ The Github repository with the issue tracker in which to read and/or create issues.
 
+- `skip_check`: _optional_
+
 - `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state. If this is omitted then the `check` step is skipped.
 
+The following parameters are for filtering from a list of issues to one issue, and therefore are ignored when an input value is specified for the `number` parameter.
+
+- `state`: _optional_
+
 - `milestone`: _optional_ currently not interfaced between frontend and backend
+
+- `assignee`: _optional_
+
+- `labels`: _optional_
 
 ### `version`: designates the Github issue state
 
@@ -51,6 +61,8 @@ This ignores any inputs and quickly dummies outputs, and therefore is primarily 
 
 The `out` step creates a Github issue according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger based on the status of the Github issue created during this step).
 
+The metadata output from this step contains the number, labels, assignees, and milestone for the issue.
+
 - `title`: _required_ The title of the Github issue.
 
 - `body`: _optional_ The body of the Github issue.
@@ -60,6 +72,8 @@ The `out` step creates a Github issue according to the input parameters below. T
 - `assignees`: _optional_ A list of assignees for the Github issue.
 
 - `milestone`: _optional_ The milestone number to associate with the issue during creation.
+
+- `state`: _optional_
 
 ## Example
 

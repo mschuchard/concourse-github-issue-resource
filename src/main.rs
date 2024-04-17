@@ -1,6 +1,6 @@
 use concourse_resource::*;
-use log;
 use env_logger;
+use log;
 
 mod concourse;
 mod github_issue;
@@ -34,7 +34,9 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return immediately with two sized vector if check step skip requested (e.g. source for out/put+create)
         if source.skip_check() {
-            log::info!("the check step will be skipped because 'skip_check' was set to true in source");
+            log::info!(
+                "the check step will be skipped because 'skip_check' was set to true in source"
+            );
             return vec![
                 concourse::Version::new(String::from("Open")),
                 concourse::Version::new(String::from("Closed")),
