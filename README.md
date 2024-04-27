@@ -9,25 +9,25 @@ This repository and project is based on the work performed for [MITODL](https://
 ### `source`: designates the Github repository, issue number, and personal access token
 
 **parameters**
-- `pat`: _required/optional_ The personal access token for authentication and authorization. If anonymous read is permitted, then this is optional for the `check` step. Otherwise it is required for `check` with private repos and `out` with probably all repos.
+- `pat`: _required/optional_ The personal access token for authentication and authorization. If anonymous read and write for Issues is permitted, then this is optional for the `check` and `out` steps. Otherwise it is required for private repos, or any other situation where anonymous read and write for Issues is not authorized.
 
-- `owner`: _required_ The owner of the target repo expressed as either a user or organization.
+- `owner`: _required_ The owner of the target repository expressed as either a user or organization.
 
-- `repo`: _required_ The Github repository with the issue tracker in which to read and/or create issues.
+- `repo`: _required_ The Github repository with the issue tracker in which to read and/or write issues.
 
-- `skip_check`: _optional_
+- `skip_check`: _optional_ A boolean that signifies whether to skip the `check` step or not. This is primarily useful for situations where it is known that a specified issue does not exist, and instead must be created during `out`.
 
-- `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state. If this is omitted then the `check` step is skipped.
+- `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step (future feature). If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue.
 
-The following parameters are for filtering from a list of issues to one issue, and therefore are ignored when an input value is specified for the `number` parameter.
+The following parameters are for filtering from a list of issues to one issue (i.e. "search") during the `check` step, and therefore their values are ignored when an input value is specified for the `number` parameter.
 
-- `state`: _optional_
+- `state`: _optional_ (value currently ignored) The current state of the searched issue. This can be either `Open`, `Closed`, or `All`.
 
-- `milestone`: _optional_ currently not interfaced between frontend and backend
+- `milestone`: _optional_ The numeric ID of the milestone associated with the searched issue.
 
-- `assignee`: _optional_
+- `assignee`: _optional_ The user name of the assignee for the searched issue.
 
-- `labels`: _optional_
+- `labels`: _optional_ (value currently ignored) The list of labels for the searched issue.
 
 ### `version`: designates the Github issue state
 
@@ -55,25 +55,25 @@ Open:
 
 ### `in`: currently unused
 
-This ignores any inputs and quickly dummies outputs, and therefore is primarily useful for enforcing a useful `check` step with minimal overhead.
+This ignores any inputs and quickly dummies outputs, and therefore is primarily useful for executing an efficient `check` step with minimal overhead.
 
 ### `out`: creates a Github issue
 
-The `out` step creates a Github issue according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger based on the status of the Github issue created during this step).
+The `out` step creates a Github issue (in the future will also update an issue) according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger Concourse steps based on the status of the Github issue created during this step).
 
 The metadata output from this step contains the number, labels, assignees, and milestone for the issue.
 
-- `title`: _required_ The title of the Github issue.
+- `title`: _required_ The title of the written Github issue.
 
-- `body`: _optional_ The body of the Github issue.
+- `body`: _optional_ The body of the written Github issue.
 
-- `labels`: _optional_ A list of labels for the Github issue.
+- `labels`: _optional_ (value currently ignored) The list of labels for the written Github issue.
 
-- `assignees`: _optional_ A list of assignees for the Github issue.
+- `assignees`: _optional_ (value currently ignored) The list of assignees for the written Github issue.
 
-- `milestone`: _optional_ The milestone number to associate with the issue during creation.
+- `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
-- `state`: _optional_
+- `state`: _optional_ (value currently ignored) The desired state of the updated issue (future feature). This can be either `Open` or `Closed`.
 
 ## Example
 
