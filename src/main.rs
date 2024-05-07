@@ -155,9 +155,14 @@ impl concourse_resource::Resource for GithubIssue {
             version: concourse::Version::new(String::from("Open")),
             metadata: Some(concourse::OutMetadata::new(
                 issue.number,
+                issue.url,
+                issue.title,
+                issue.state,
                 issue.labels,
                 issue.assignees,
                 issue.milestone,
+                issue.created_at.to_string(),
+                issue.updated_at.to_string(),
             )),
         }
     }

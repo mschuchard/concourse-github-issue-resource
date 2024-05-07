@@ -123,9 +123,14 @@ impl OutParams {
 #[derive(Eq, PartialEq, Serialize, Debug, IntoMetadataKV)]
 pub(crate) struct OutMetadata {
     number: u64,
+    url: String,
+    title: String,
+    state: octocrab::models::IssueState,
     labels: Vec<octocrab::models::Label>,
     assignees: Vec<octocrab::models::Author>,
     milestone: Option<octocrab::models::Milestone>,
+    created: String,
+    updated: String,
 }
 
 impl OutMetadata {
@@ -138,15 +143,28 @@ impl OutMetadata {
     /// ```
     pub(crate) fn new(
         number: u64,
+        url: impl Into<String>,
+        title: String,
+        state: octocrab::models::IssueState,
         labels: Vec<octocrab::models::Label>,
         assignees: Vec<octocrab::models::Author>,
         milestone: Option<octocrab::models::Milestone>,
+        created: String,
+        updated: String,
     ) -> Self {
+        // type conversion traits
+        let url = url.into();
+        // return instantiated out metadata
         OutMetadata {
             number,
+            url,
+            title,
+            state,
             labels,
             assignees,
             milestone,
+            created,
+            updated,
         }
     }
 }
