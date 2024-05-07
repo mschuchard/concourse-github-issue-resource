@@ -289,20 +289,32 @@ mod tests {
         )
     }
 
-    /*#[test]
+    #[test]
     fn test_outmetadata_new() {
         assert_eq!(
             OutMetadata::new(
                 5,
-                vec![octocrab::models::Author {}],
-                vec![octocrab::models::Label {}]
+                String::from("http://does.not.exist"),
+                String::from("some issue"),
+                octocrab::models::IssueState::Open,
+                vec![],
+                vec![],
+                None,
+                String::from("yesterday"),
+                String::from("today"),
             ),
             OutMetadata {
                 number: 5,
-                labels: vec![octocrab::models::Author {}],
-                assignees: vec![octocrab::models::Label {}]
+                url: String::from("http://does.not.exist"),
+                title: String::from("some issue"),
+                state: octocrab::models::IssueState::Open,
+                labels: vec![],
+                assignees: vec![],
+                milestone: None,
+                created: String::from("yesterday"),
+                updated: String::from("today"),
             },
             "outmetadata could not be constructed with the correct values"
         )
-    }*/
+    }
 }
