@@ -45,12 +45,13 @@ impl concourse_resource::Resource for GithubIssue {
 
         // create longer lifetime bindings
         let owner_binding = source.owner();
+        let repo_binding = source.repo();
         let state_binding = source.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
             &owner_binding,
-            source.repo(),
+            &repo_binding,
             None,
             None,
             source.labels(),
@@ -126,12 +127,13 @@ impl concourse_resource::Resource for GithubIssue {
 
         // create longer lifetime bindings
         let owner_binding = source.owner();
+        let repo_binding = source.repo();
         let state_binding = source.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
             &owner_binding,
-            source.repo(),
+            &repo_binding,
             Some(params.title()),
             params.body(),
             params.labels(),

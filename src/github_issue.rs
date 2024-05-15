@@ -43,7 +43,7 @@ pub(crate) struct Issue<'issue> {
     // client and issues: OctocrabBuilder and issues::IssueHandler
     pat: Option<String>,
     owner: &'issue str,
-    repo: String,
+    repo: &'issue str,
     // create and update (octocrab update expects AsRef<str> instead of String and AsRef<[String]> instead of Vec<String>)
     title: Option<String>,
     body: Option<String>,
@@ -68,7 +68,7 @@ impl<'issue> Issue<'issue> {
     pub(crate) fn new(
         pat: Option<String>,
         owner: &'issue str,
-        repo: impl Into<String>,
+        repo: &'issue str,
         title: Option<String>,
         body: Option<String>,
         labels: Option<Vec<String>>,
@@ -77,8 +77,6 @@ impl<'issue> Issue<'issue> {
         state: Option<&'issue str>,
         milestone: Option<u64>,
     ) -> Self {
-        // type conversion traits
-        let repo = repo.into();
         // return instantiated github issue
         Self {
             pat,
@@ -114,7 +112,7 @@ impl<'issue> Issue<'issue> {
                 .expect("could not authenticate client with Personal Access Token"),
             None => octocrab::Octocrab::default(),
         };
-        let issues = client.issues(self.owner, &self.repo);
+        let issues = client.issues(self.owner, self.repo);
         // execute action and assign returned issue
         let issue = match action {
             // create an issue
@@ -371,7 +369,7 @@ mod tests {
             Issue {
                 pat: None,
                 owner: "my_org",
-                repo: String::from("my_repo"),
+                repo: "my_repo",
                 title: None,
                 body: None,
                 labels: None,
@@ -401,7 +399,7 @@ mod tests {
             Issue {
                 pat: None,
                 owner: "my_org",
-                repo: String::from("my_repo"),
+                repo: "my_repo",
                 title: Some(String::from("my issue")),
                 body: Some(String::from("my body")),
                 labels: Some(vec![String::from("label")]),
