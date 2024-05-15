@@ -42,7 +42,7 @@ fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
 pub(crate) struct Issue<'issue> {
     // client and issues: OctocrabBuilder and issues::IssueHandler
     pat: Option<String>,
-    owner: String,
+    owner: &'issue str,
     repo: String,
     // create and update (octocrab update expects AsRef<str> instead of String and AsRef<[String]> instead of Vec<String>)
     title: Option<String>,
@@ -67,7 +67,7 @@ impl<'issue> Issue<'issue> {
     /// ```
     pub(crate) fn new(
         pat: Option<String>,
-        owner: impl Into<String>,
+        owner: &'issue str,
         repo: impl Into<String>,
         title: Option<String>,
         body: Option<String>,
@@ -78,7 +78,6 @@ impl<'issue> Issue<'issue> {
         milestone: Option<u64>,
     ) -> Self {
         // type conversion traits
-        let owner = owner.into();
         let repo = repo.into();
         // return instantiated github issue
         Self {
@@ -115,7 +114,7 @@ impl<'issue> Issue<'issue> {
                 .expect("could not authenticate client with Personal Access Token"),
             None => octocrab::Octocrab::default(),
         };
-        let issues = client.issues(&self.owner, &self.repo);
+        let issues = client.issues(self.owner, &self.repo);
         // execute action and assign returned issue
         let issue = match action {
             // create an issue
@@ -371,7 +370,7 @@ mod tests {
             ),
             Issue {
                 pat: None,
-                owner: String::from("my_org"),
+                owner: "my_org",
                 repo: String::from("my_repo"),
                 title: None,
                 body: None,
@@ -401,7 +400,7 @@ mod tests {
             ),
             Issue {
                 pat: None,
-                owner: String::from("my_org"),
+                owner: "my_org",
                 repo: String::from("my_repo"),
                 title: Some(String::from("my issue")),
                 body: Some(String::from("my body")),

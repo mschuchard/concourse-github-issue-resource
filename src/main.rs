@@ -43,11 +43,13 @@ impl concourse_resource::Resource for GithubIssue {
             ];
         }
 
-        // construct an issue...
+        // create longer lifetime bindings
+        let owner_binding = source.owner();
         let state_binding = source.state();
+        // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
-            source.owner(),
+            &owner_binding,
             source.repo(),
             None,
             None,
@@ -122,11 +124,13 @@ impl concourse_resource::Resource for GithubIssue {
             None => panic!("params is required for the Github Issue resource out/put step"),
         };
 
-        // construct an issue...
+        // create longer lifetime bindings
+        let owner_binding = source.owner();
         let state_binding = source.state();
+        // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
-            source.owner(),
+            &owner_binding,
             source.repo(),
             Some(params.title()),
             params.body(),
