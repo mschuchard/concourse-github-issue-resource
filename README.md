@@ -69,7 +69,7 @@ The metadata output from this step contains the number, labels, assignees, and m
 
 - `labels`: _optional_ (value currently ignored) The list of labels for the written Github issue.
 
-- `assignees`: _optional_ (value currently ignored) The list of assignees for the written Github issue.
+- `assignees`: _optional_ The list of assignees for the written Github issue.
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 

@@ -44,6 +44,7 @@ impl concourse_resource::Resource for GithubIssue {
         }
 
         // construct an issue...
+        let state_binding = source.state();
         let gh_issue = github_issue::Issue::new(
             source.pat(),
             source.owner(),
@@ -53,7 +54,7 @@ impl concourse_resource::Resource for GithubIssue {
             source.labels(),
             source.assignee(),
             source.number(),
-            None, //source.state(),
+            state_binding.as_deref(),
             source.milestone(),
         );
         // ...determine the action...
@@ -122,6 +123,7 @@ impl concourse_resource::Resource for GithubIssue {
         };
 
         // construct an issue...
+        let state_binding = source.state();
         let gh_issue = github_issue::Issue::new(
             source.pat(),
             source.owner(),
@@ -131,7 +133,7 @@ impl concourse_resource::Resource for GithubIssue {
             params.labels(),
             params.assignees(),
             source.number(),
-            None, //params.state(),
+            state_binding.as_deref(),
             params.milestone(),
         );
         // ...and create the octocrab github issue
