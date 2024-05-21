@@ -128,7 +128,7 @@ impl concourse_resource::Resource for GithubIssue {
         // create longer lifetime bindings
         let owner_binding = source.owner();
         let repo_binding = source.repo();
-        let state_binding = source.state();
+        let state_binding = params.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
