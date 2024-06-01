@@ -1,4 +1,4 @@
-### 1.0.1 (Next)
+### 1.0.1
 - Add more Metadata to out/put step.
 - Enable state parameter in check and out steps.
 

@@ -21,7 +21,7 @@ This repository and project is based on the work performed for [MITODL](https://
 
 The following parameters are for filtering from a list of issues to one issue (i.e. "search") during the `check` step, and therefore their values are ignored when an input value is specified for the `number` parameter.
 
-- `state`: _optional_ (value currently ignored) The current state of the searched issue. This can be either `Open`, `Closed`, or `All`.
+- `state`: _optional_ The current state of the searched issue. This can be either `Open`, `Closed`, or `All`.
 
 - `milestone`: _optional_ The numeric ID of the milestone associated with the searched issue.
 
@@ -73,7 +73,7 @@ The metadata output from this step contains the number, labels, assignees, and m
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
-- `state`: _optional_ (value currently ignored) The desired state of the updated issue (future feature). This can be either `Open` or `Closed`.
+- `state`: _optional_ The desired state of the updated issue (future feature). This can be either `Open` or `Closed`.
 
 ## Example
 
