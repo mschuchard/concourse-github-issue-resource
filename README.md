@@ -2,6 +2,8 @@
 
 A [concourse-ci](https://concourse-ci.org) resource for interacting with [Github Issues](https://docs.github.com/en/issues/tracking-your-work-with-issues).
 
+This resource's container image is currently hosted at [matthewschuchard/concourse-github-issue-resource](https://hub.docker.com/repository/docker/matthewschuchard/concourse-github-issue-resource) for usage within Concourse.
+
 This repository and project is based on the work performed for [MITODL](https://github.com/mitodl/concourse-github-issue-resource), and now serves as an upstream for the project hosted within that organization. Accordingly it maintains the BSD-3 license with copyright notice.
 
 ## Behavior
@@ -82,7 +84,7 @@ resource_types:
 - name: github_issue
   type: docker-image
   source:
-    repository: mitodl/concourse-github-issue-resource
+    repository: matthewschuchard/concourse-github-issue-resource:1.0
     tag: latest
 
 resources:
