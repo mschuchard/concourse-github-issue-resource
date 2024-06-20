@@ -8,6 +8,8 @@ This repository and project is based on the work performed for [MITODL](https://
 
 ## Behavior
 
+**All references to update operations are for the upcoming v1.1.0 release.**
+
 ### `source`: designates the Github repository, issue number, and personal access token
 
 **parameters**
@@ -19,7 +21,7 @@ This repository and project is based on the work performed for [MITODL](https://
 
 - `skip_check`: _optional_ A boolean that signifies whether to skip the `check` step or not. This is primarily useful for situations where it is known that a specified issue does not exist, and instead must be created during `out`.
 
-- `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step (future feature). If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue.
+- `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step. If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue during the `check` step, and a create operation during the `out` step.
 
 The following parameters are for filtering from a list of issues to one issue (i.e. "search") during the `check` step, and therefore their values are ignored when an input value is specified for the `number` parameter.
 
@@ -61,21 +63,23 @@ This ignores any inputs and quickly dummies outputs, and therefore is primarily 
 
 ### `out`: creates a Github issue
 
-The `out` step creates a Github issue (in the future will also update an issue) according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger Concourse steps based on the status of the Github issue created during this step).
+The `out` step updates or creates a Github issue according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger Concourse steps based on the status of the Github issue created during this step).
 
-The metadata output from this step contains the number, labels, assignees, and milestone for the issue.
+Recall that the parameter which determines whether a create or update operation occurs during this step is `source.number`.
+
+The metadata output from this step contains the number, url, title, state, labels, assignees, milestone, created time, and last updated time for the issue.
 
 - `title`: _required_ The title of the written Github issue.
 
 - `body`: _optional_ The body of the written Github issue.
 
-- `labels`: _optional_ (value currently ignored) The list of labels for the written Github issue.
+- `labels`: _optional_ (value currently ignored for update) The list of labels for the written Github issue.
 
-- `assignees`: _optional_ The list of assignees for the written Github issue.
+- `assignees`: _optional_ (value currently ignored for update) The list of assignees for the written Github issue.
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
-- `state`: _optional_ The desired state of the updated issue (future feature). This can be either `Open` or `Closed`.
+- `state`: _optional_ The desired state of the updated issue. This can be either `Open` or `Closed`.
 
 ## Example
 

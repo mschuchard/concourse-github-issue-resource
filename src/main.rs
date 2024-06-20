@@ -152,7 +152,9 @@ impl concourse_resource::Resource for GithubIssue {
             Ok(issue) => issue,
             Err(error) => {
                 log::error!("{error}");
-                panic!("the out/put step was unable to update or create the associated github issue");
+                panic!(
+                    "the out/put step was unable to update or create the associated github issue"
+                );
             }
         };
         log::info!("the github issue was successfully updated or created");
