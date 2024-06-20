@@ -139,7 +139,7 @@ impl OutMetadata {
     /// # Examples
     ///
     /// ```
-    /// let metadata = OutMetadata::new(10, !vec[String::from("triage")], !vec[String::from("myuser")], 3); // this is inaccurate re: struct models
+    /// let metadata = OutMetadata::new(10, !vec[String::from("triage")], !vec[String::from("myuser")], 3)
     /// ```
     pub(crate) fn new(
         number: u64,

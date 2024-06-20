@@ -142,15 +142,20 @@ impl concourse_resource::Resource for GithubIssue {
             state_binding.as_deref(),
             params.milestone(),
         );
+        // ...determine the action...
+        let action = match source.number() {
+            Some(_) => github_issue::Action::Update,
+            None => github_issue::Action::Create,
+        };
         // ...and create the octocrab github issue
-        let issue = match gh_issue.main(github_issue::Action::Create).await {
+        let issue = match gh_issue.main(action).await {
             Ok(issue) => issue,
             Err(error) => {
                 log::error!("{error}");
-                panic!("the out/put step was unable to create the associated github issue");
+                panic!("the out/put step was unable to update or create the associated github issue");
             }
         };
-        log::info!("the github issue was successfully created");
+        log::info!("the github issue was successfully updated or created");
 
         // store issue number in file for subsequent check step
         let file_path = format!("{input_path}/issue_number.txt");
