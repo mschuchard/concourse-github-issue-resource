@@ -159,11 +159,13 @@ impl concourse_resource::Resource for GithubIssue {
         };
         log::info!("the github issue was successfully updated or created");
 
-        // store issue number in file for subsequent check step
-        let file_path = format!("{input_path}/issue_number.txt");
-        std::fs::write(file_path, issue.number.to_string())
-            .expect("issue number could not be written to {file_path}");
-        log::info!("the issue number was stored in a file at '{input_path}/issue_number.txt'");
+        if source.number().is_none() {
+            // store created issue number in file for subsequent check step
+            let file_path = format!("{input_path}/issue_number.txt");
+            std::fs::write(file_path, issue.number.to_string())
+                .expect("issue number could not be written to {file_path}");
+            log::info!("the issue number was stored in a file at '{input_path}/issue_number.txt'");
+        }
 
         // return out step output
         concourse_resource::OutOutput {
