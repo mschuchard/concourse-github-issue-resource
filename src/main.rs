@@ -153,11 +153,12 @@ impl concourse_resource::Resource for GithubIssue {
             Err(error) => {
                 log::error!("{error}");
                 panic!(
-                    "the out/put step was unable to update or create the associated github issue"
+                    "the out/put step was unable to {} the associated github issue",
+                    action.to_string()
                 );
             }
         };
-        log::info!("the github issue was successfully updated or created");
+        log::info!("successful {} for the github issue", action.to_string());
 
         if source.number().is_none() {
             // store created issue number in file for subsequent check step

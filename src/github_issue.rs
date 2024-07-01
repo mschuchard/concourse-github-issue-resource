@@ -6,6 +6,7 @@ use log;
 
 // allowed operations for github issue interactions
 #[non_exhaustive]
+#[derive(Copy, Clone)]
 pub(crate) enum Action {
     Create,
     List,
@@ -341,14 +342,8 @@ mod tests {
     #[test]
     fn test_action_to_string() {
         // validates ToString trait impl for action enum
-        assert_eq!(
-            Action::Create.to_string(),
-            String::from("Create")
-        );
-        assert_eq!(
-            Action::Read.to_string(),
-            String::from("Read")
-        );
+        assert_eq!(Action::Create.to_string(), String::from("Create"));
+        assert_eq!(Action::Read.to_string(), String::from("Read"));
     }
 
     #[test]
