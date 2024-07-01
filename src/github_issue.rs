@@ -13,6 +13,17 @@ pub(crate) enum Action {
     Update,
 }
 
+impl ToString for Action {
+    fn to_string(&self) -> String {
+        match &self {
+            Action::Create => String::from("Create"),
+            Action::List => String::from("List"),
+            Action::Read => String::from("Read"),
+            Action::Update => String::from("Update"),
+        }
+    }
+}
+
 // convert string to IssueState or params::State without trait implementations because not allowed (no impl Into<octocrab::models::IssueState> for &str)
 fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
     match param {
@@ -326,6 +337,19 @@ impl<'issue> Issue<'issue> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_action_to_string() {
+        // validates ToString trait impl for action enum
+        assert_eq!(
+            Action::Create.to_string(),
+            String::from("Create")
+        );
+        assert_eq!(
+            Action::Read.to_string(),
+            String::from("Read")
+        );
+    }
 
     #[test]
     fn test_str_to_issue_state() {
