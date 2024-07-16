@@ -111,7 +111,6 @@ impl<'issue> Issue<'issue> {
     /// ```
     /// let issue = gh_issue.main(Action::Read).await?;
     /// ```
-    #[allow(unreachable_patterns)]
     pub(crate) async fn main<'octo>(
         &self,
         action: Action,
@@ -135,8 +134,6 @@ impl<'issue> Issue<'issue> {
             Action::Read => self.read(issues).await?,
             // update an issue
             Action::Update => self.update(issues).await?,
-            // invalid action specified somehow
-            _ => return Err("invalid/unsupported action specified"),
         };
 
         Ok(issue)
