@@ -87,7 +87,7 @@ impl Source {
 #[derive(Eq, PartialEq, Deserialize, Debug, Default)]
 #[serde(default)]
 pub(crate) struct OutParams {
-    // title and body later converted to &str (state already &str for now)
+    // title, repo, and state later converted to &str
     title: String,
     body: Option<String>,
     labels: Option<Vec<String>>,
@@ -112,7 +112,7 @@ impl OutParams {
         return self.assignees.clone();
     }
     pub(crate) fn milestone(&self) -> Option<u64> {
-        return self.milestone.clone();
+        return self.milestone;
     }
     pub(crate) fn state(&self) -> Option<String> {
         return self.state.clone();
@@ -139,9 +139,20 @@ impl OutMetadata {
     /// # Examples
     ///
     /// ```
-    /// let metadata = OutMetadata::new(10, !vec[String::from("triage")], !vec[String::from("myuser")], 3)
+    /// let metadata = OutMetadata::new(
+    ///     5,
+    ///     String::from("http://does.not.exist"),
+    ///     String::from("some issue"),
+    ///     octocrab::models::IssueState::Open,
+    ///     vec![],
+    ///     vec![],
+    ///     None,
+    ///     String::from("yesterday"),
+    ///     String::from("today"),
+    /// ),
     /// ```
     pub(crate) fn new(
+        // ref: https://docs.rs/octocrab/latest/octocrab/models/issues/struct.Issue.html
         number: u64,
         url: impl Into<String>,
         title: String,
