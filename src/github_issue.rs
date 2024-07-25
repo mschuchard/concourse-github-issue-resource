@@ -361,9 +361,12 @@ mod tests {
     #[test]
     fn test_str_to_params_state() {
         // octocrab::params::State does not implement Eq
-        str_to_params_state("Open").unwrap();
-        str_to_params_state("Closed").unwrap();
-        str_to_params_state("All").unwrap();
+        str_to_params_state("Open")
+            .expect("could not convert \"Open\" to octocrab::params::State::Open");
+        str_to_params_state("Closed")
+            .expect("could not convert \"Closed\" to octocrab::params::State::Closed");
+        str_to_params_state("All")
+            .expect("could not convert \"All\" to octocrab::params::State::All");
     }
 
     #[test]
