@@ -27,10 +27,7 @@ impl concourse_resource::Resource for GithubIssue {
         _ = env_logger::try_init();
 
         // validate and unwrap source
-        let source = match source {
-            Some(source) => source,
-            None => panic!("source is required for the Github Issue resource"),
-        };
+        let source = source.expect("source is required for the Github Issue resource");
 
         // return immediately with two sized vector if check step skip requested (e.g. source for out/put+create)
         if source.skip_check() {
@@ -115,15 +112,8 @@ impl concourse_resource::Resource for GithubIssue {
         _ = env_logger::try_init();
 
         // validate source and params
-        let source = match source {
-            Some(source) => source,
-            // note it would be bizarre if this was ever reached since it is already validated in check
-            None => panic!("source is required for the Github Issue resource"),
-        };
-        let params = match params {
-            Some(params) => params,
-            None => panic!("params is required for the Github Issue resource out/put step"),
-        };
+        let source = source.expect("source is required for the Github Issue resource");
+        let params = params.expect("params is required for the Github Issue resource out/put step");
 
         // create longer lifetime bindings
         let owner_binding = source.owner();

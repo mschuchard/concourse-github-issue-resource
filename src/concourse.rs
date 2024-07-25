@@ -76,10 +76,7 @@ impl Source {
     }
     // return unwrapped value with default false for ease of use
     pub(crate) fn skip_check(&self) -> bool {
-        return match self.skip_check {
-            Some(skip_check) => skip_check,
-            None => false,
-        };
+        return self.skip_check.unwrap_or(false)
     }
 }
 
