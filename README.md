@@ -8,8 +8,6 @@ This repository and project is based on the work performed for [MITODL](https://
 
 ## Behavior
 
-**All references to update operations are for the upcoming v1.1.0 release.**
-
 ### `source`: designates the Github repository, issue number, and personal access token
 
 **parameters**

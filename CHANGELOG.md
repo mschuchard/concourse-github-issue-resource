@@ -1,4 +1,4 @@
-### 1.1.0 (Next)
+### 1.1.0
 - Enable issue updating during out/put step.
 
 ### 1.0.1
