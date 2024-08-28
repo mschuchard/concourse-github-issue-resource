@@ -325,4 +325,24 @@ mod tests {
             "outmetadata could not be constructed with the correct values"
         )
     }
+
+    #[test]
+    fn test_outmetadata_serialize() {
+        let out_metadata = OutMetadata::new(
+            5,
+            String::from("http://does.not.exist"),
+            String::from("some issue"),
+            octocrab::models::IssueState::Open,
+            vec![],
+            vec![],
+            None,
+            String::from("yesterday"),
+            String::from("today"),
+        );
+        assert_eq!(
+            serde_json::to_string(&out_metadata).expect("out metadata could not be serialized"),
+            r#"{"number":5,"url":"http://does.not.exist","title":"some issue","state":"open","labels":[],"assignees":[],"milestone":null,"created":"yesterday","updated":"today"}"#,
+            "out metadata did not contain the correct values"
+        )
+    }
 }
