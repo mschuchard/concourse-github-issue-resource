@@ -29,7 +29,7 @@ impl Version {
 // check and out input
 #[derive(Eq, PartialEq, Deserialize, Debug)]
 pub(crate) struct Source {
-    // client and issues
+    // client and issues; owner and repo later converted to &str
     pat: Option<String>,
     owner: String,
     repo: String,
@@ -82,9 +82,8 @@ impl Source {
 
 // out input
 #[derive(Eq, PartialEq, Deserialize, Debug, Default)]
-#[serde(default)]
 pub(crate) struct OutParams {
-    // title, repo, and state later converted to &str
+    // title and state later converted to &str
     title: String,
     body: Option<String>,
     labels: Option<Vec<String>>,
