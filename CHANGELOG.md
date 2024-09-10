@@ -1,3 +1,6 @@
+### 1.1.1
+- Update version outputs to be consistent with Octocrab serialization of state enums.
+
 ### 1.1.0
 - Enable issue updating during out/put step.
 

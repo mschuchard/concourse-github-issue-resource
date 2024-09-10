@@ -17,7 +17,7 @@ impl concourse_resource::Resource for GithubIssue {
     type OutMetadata = concourse::OutMetadata;
 
     // implementations for steps
-    /// Performs the check step for the resource. Returns a single sized vector of version of state string if the input issue is Open (no trigger), and a two sized vector of version of state string if the input issue is closed (trigger). For convenience and standardization the former return is "Open", and the latter is "Open" and "Closed".
+    /// Performs the check step for the resource. Returns a single sized vector of version of state string if the input issue is Open (no trigger), and a two sized vector of version of state string if the input issue is closed (trigger). For convenience and standardization the former return is "open", and the latter is "open" and "closed".
     #[tokio::main]
     async fn resource_check(
         source: Option<Self::Source>,
@@ -35,8 +35,8 @@ impl concourse_resource::Resource for GithubIssue {
                 "the check step will be skipped because 'skip_check' was set to true in source"
             );
             return vec![
-                concourse::Version::new(String::from("Open")),
-                concourse::Version::new(String::from("Closed")),
+                concourse::Version::new(String::from("open")),
+                concourse::Version::new(String::from("closed")),
             ];
         }
 
@@ -74,8 +74,8 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return one sized version vector if issue is open and two sized if closed
         match issue.state {
-            octocrab::models::IssueState::Open => vec![concourse::Version::new(String::from("Open"))],
-            octocrab::models::IssueState::Closed => vec![concourse::Version::new(String::from("Open")), concourse::Version::new(String::from("Closed"))],
+            octocrab::models::IssueState::Open => vec![concourse::Version::new(String::from("open"))],
+            octocrab::models::IssueState::Closed => vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
             _ => panic!("expected the github issue state to either be Open or Closed, and somehow it is something else")
         }
     }
@@ -96,7 +96,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         log::info!("reminder: the in step is only to be used for an efficient check step with minimal overhead");
         Ok(concourse_resource::InOutput {
-            version: concourse::Version::new(String::from("Open")),
+            version: concourse::Version::new(String::from("open")),
             metadata: None,
         })
     }
@@ -160,7 +160,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return out step output
         concourse_resource::OutOutput {
-            version: concourse::Version::new(String::from("Open")),
+            version: concourse::Version::new(String::from("open")),
             metadata: Some(concourse::OutMetadata::new(
                 issue.number,
                 issue.url,
@@ -213,7 +213,7 @@ mod tests {
         // the issue is closed so we expect a size two vec
         assert_eq!(
                 version_vec,
-                vec![concourse::Version::new(String::from("Open")), concourse::Version::new(String::from("Closed"))],
+                vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
                 "the resource_check did not return a two size vector of issue states for a closed issue",
             );
     }
@@ -246,7 +246,7 @@ mod tests {
         // the issue is open so we expect a size one vec
         assert_eq!(
             version_vec,
-            vec![concourse::Version::new(String::from("Open"))],
+            vec![concourse::Version::new(String::from("open"))],
             "the resource_check did not return a one size vector of issue states for an open issue",
         );
     }
@@ -279,7 +279,7 @@ mod tests {
         // skip check step requested so we expect size two vec
         assert_eq!(
                 version_vec,
-                vec![concourse::Version::new(String::from("Open")), concourse::Version::new(String::from("Closed"))],
+                vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
                 "the resource_check did not return a two size vector of issue states for a requested check skip",
             );
     }
@@ -295,7 +295,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             in_output.version,
-            concourse::Version::new(String::from("Open")),
+            concourse::Version::new(String::from("open")),
             "the resource in did not dummy the expected return version output",
         );
     }
