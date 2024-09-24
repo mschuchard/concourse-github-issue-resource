@@ -124,7 +124,7 @@ impl concourse_resource::Resource for GithubIssue {
             source.pat(),
             &owner_binding,
             &repo_binding,
-            Some(params.title()),
+            params.title(),
             params.body(),
             params.labels(),
             params.assignees(),

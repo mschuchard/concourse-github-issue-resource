@@ -84,7 +84,7 @@ impl Source {
 #[derive(Eq, PartialEq, Deserialize, Debug, Default)]
 pub(crate) struct OutParams {
     // title and state later converted to &str
-    title: String,
+    title: Option<String>,
     body: Option<String>,
     labels: Option<Vec<String>>,
     assignees: Option<Vec<String>>,
@@ -95,7 +95,7 @@ pub(crate) struct OutParams {
 
 impl OutParams {
     /// Readers
-    pub(crate) fn title(&self) -> String {
+    pub(crate) fn title(&self) -> Option<String> {
         return self.title.clone();
     }
     pub(crate) fn body(&self) -> Option<String> {
@@ -255,7 +255,7 @@ mod tests {
     fn test_outparams_title() {
         assert_eq!(
             OutParams {
-                title: String::from("mytitle"),
+                title: Some(String::from("mytitle")),
                 body: None,
                 labels: None,
                 assignees: None,
@@ -263,7 +263,7 @@ mod tests {
                 state: None,
             }
             .title,
-            String::from("mytitle"),
+            Some(String::from("mytitle")),
             "reader for outparams title did not return expected member value"
         )
     }
@@ -282,7 +282,7 @@ mod tests {
         assert_eq!(
             out_params,
             OutParams {
-                title: String::from("my_issue"),
+                title: Some(String::from("my_issue")),
                 body: Some(String::from("approve the concourse step")),
                 labels: None,
                 assignees: Some(vec![
