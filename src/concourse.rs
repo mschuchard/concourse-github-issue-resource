@@ -122,8 +122,11 @@ pub(crate) struct OutMetadata {
     url: String,
     title: String,
     state: octocrab::models::IssueState,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     labels: Vec<octocrab::models::Label>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     assignees: Vec<octocrab::models::Author>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     milestone: Option<octocrab::models::Milestone>,
     created: String,
     updated: String,
@@ -332,6 +335,7 @@ mod tests {
             String::from("http://does.not.exist"),
             String::from("some issue"),
             octocrab::models::IssueState::Open,
+            // cannot test next three since no constructors and non-exhaustive structs
             vec![],
             vec![],
             None,
@@ -340,7 +344,7 @@ mod tests {
         );
         assert_eq!(
             serde_json::to_string(&out_metadata).expect("out metadata could not be serialized"),
-            r#"{"number":5,"url":"http://does.not.exist","title":"some issue","state":"open","labels":[],"assignees":[],"milestone":null,"created":"yesterday","updated":"today"}"#,
+            r#"{"number":5,"url":"http://does.not.exist","title":"some issue","state":"open","created":"yesterday","updated":"today"}"#,
             "out metadata did not contain the correct values"
         )
     }
