@@ -79,6 +79,29 @@ The metadata output from this step contains the number, url, title, state, label
 
 - `state`: _optional_ The desired state of the updated issue. This can be either `Open` or `Closed`.
 
+### Metadata
+
+Below is the general structure of the generated Concourse metadata. Note that the `labels` and `assignees`  keys will not exist if their value is empty, and the `milestone` key will not exist if its value is `null`.
+
+```json
+{
+  "number": "issue number",
+  "url": "issue url",
+  "title": "issue title",
+  "state": "open|closed",
+  "labels": ["issue labels (see below doc link)"],
+  "assignees": ["issue assignees (see below doc link)"],
+  "milestone": "issue milestone (see below doc link)",
+  "created": "issue creation time",
+  "updated": "issue updated time"
+}
+```
+
+Octocrab doc links:  
+[Label](https://docs.rs/octocrab/latest/octocrab/models/struct.Label.html)  
+[Assignee](https://docs.rs/octocrab/latest/octocrab/models/struct.Author.html)  
+[Milestone](https://docs.rs/octocrab/latest/octocrab/models/struct.Milestone.html)
+
 ## Example
 
 ```yaml
