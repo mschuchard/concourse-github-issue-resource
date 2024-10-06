@@ -19,7 +19,7 @@ This repository and project is based on the work performed for [MITODL](https://
 
 - `skip_check`: _optional_ A boolean that signifies whether to skip the `check` step or not. This is primarily useful for situations where it is known that a specified issue does not exist, and instead must be created during `out`.
 
-- `number`: _optional_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step. If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue during the `check` step, and a create operation during the `out` step.
+- `number`: _optional/required_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step. If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue during the `check` step, and a create operation during the `out` step. Therefore this is implicitly required if an issue update is desired as a new issue creation attempt will occur during `out` otherwise.
 
 The following parameters are for filtering from a list of issues to one issue (i.e. "search") during the `check` step, and therefore their values are ignored when an input value is specified for the `number` parameter.
 
@@ -34,7 +34,7 @@ The following parameters are for filtering from a list of issues to one issue (i
 ### `version`: designates the Github issue state
 
 **parameters**
-- `version`: _optional_ The state of the issue specified in the `source` expressed as the enum `Closed` or `Open` converted to a string. This is an output only and is ignored as an input parameter.
+- `version`: _optional_ The state of the issue specified in the `source` expressed as the enum `Closed` or `Open` (note the states' serialization is implemented by Octocrab to be lowercase strings). This is an output only and is ignored as an input parameter.
 
 ```yaml
 version:
@@ -43,16 +43,16 @@ version:
 
 ### `check`: returns size two list for Closed Github issues and size one list for Open Github issues
 
-The `check` step determines the state of the specified Github issue. If the state is `Closed` then the returned list of versions is size two. If the state is `Open` then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`Closed` triggers and `Open` does not trigger) because it simulates a delta of versions for `Closed` and not `Open`. The actual returns are the following:
+The `check` step determines the state of the specified Github issue. If the state is `Closed` then the returned list of versions is size two. If the state is `Open` then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`Closed` triggers and `Open` does not trigger) because it simulates a delta of versions for `Closed` and not `Open`. The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
 
 Closed:
 ```json
-[{"state":"Open"},{"state":"Closed"}]
+[{"state":"open"},{"state":"closed"}]
 ```
 
 Open:
 ```json
-[{"state":"Open"}]
+[{"state":"open"}]
 ```
 
 ### `in`: currently unused
@@ -67,7 +67,7 @@ Recall that the parameter which determines whether a create or update operation 
 
 The metadata output from this step contains the number, url, title, state, labels, assignees, milestone, created time, and last updated time for the issue.
 
-- `title`: _required_ The title of the written Github issue.
+- `title`: _optional/required_ The title of the written Github issue (required for new issue).
 
 - `body`: _optional_ The body of the written Github issue.
 

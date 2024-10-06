@@ -1,4 +1,4 @@
-### 1.1.1 (Next)
+### 1.1.1
 - Update version outputs to be consistent with Octocrab serialization of state enums.
 - Update title parameter to be optional input in `out` step.
 
