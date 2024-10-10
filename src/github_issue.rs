@@ -28,23 +28,23 @@ impl ToString for Action {
 // convert string to IssueState or params::State without trait implementations because not allowed (no impl Into<octocrab::models::IssueState> for &str)
 fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
     match param {
-        "Open" => Ok(octocrab::models::IssueState::Open),
+        "open" => Ok(octocrab::models::IssueState::Open),
         "closed" => Ok(octocrab::models::IssueState::Closed),
         "All" => {
             log::warn!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
-            log::warn!("the issue state will be reset to 'Open'");
+            log::warn!("the issue state will be reset to 'open'");
             Ok(octocrab::models::IssueState::Open)
         }
-        &_ => Err("the issue state must be either Open or closed"),
+        &_ => Err("the issue state must be either open or closed"),
     }
 }
 
 fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
     match param {
-        "Open" => Ok(octocrab::params::State::Open),
+        "open" => Ok(octocrab::params::State::Open),
         "closed" => Ok(octocrab::params::State::Closed),
         "All" => Ok(octocrab::params::State::All),
-        &_ => Err("the issue state must be either Open, closed, or All"),
+        &_ => Err("the issue state must be either open, closed, or All"),
     }
 }
 
@@ -347,9 +347,9 @@ mod tests {
     fn test_str_to_issue_state() {
         // validates issue open and closed conversions
         assert_eq!(
-            str_to_issue_state("Open"),
+            str_to_issue_state("open"),
             Ok(octocrab::models::IssueState::Open),
-            "failed to convert Open str to Open enum"
+            "failed to convert open str to open enum"
         );
 
         assert_eq!(
@@ -361,8 +361,8 @@ mod tests {
     #[test]
     fn test_str_to_params_state() {
         // octocrab::params::State does not implement Eq
-        str_to_params_state("Open")
-            .expect("could not convert \"Open\" to octocrab::params::State::Open");
+        str_to_params_state("open")
+            .expect("could not convert \"open\" to octocrab::params::State::open");
         str_to_params_state("closed")
             .expect("could not convert \"closed\" to octocrab::params::State::Closed");
         str_to_params_state("All")
@@ -472,7 +472,7 @@ mod tests {
                 None,
                 Some(vec![String::from("pdpinch")]),
                 None,
-                Some("Open"),
+                Some("open"),
                 None,
             );
             let issue = gh_issue.main(Action::List).await;

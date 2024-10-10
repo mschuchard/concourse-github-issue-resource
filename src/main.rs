@@ -76,7 +76,7 @@ impl concourse_resource::Resource for GithubIssue {
         match issue.state {
             octocrab::models::IssueState::Open => vec![concourse::Version::new(String::from("open"))],
             octocrab::models::IssueState::Closed => vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
-            _ => panic!("expected the github issue state to either be Open or closed, and somehow it is something else")
+            _ => panic!("expected the github issue state to either be open or closed, and somehow it is something else")
         }
     }
 
@@ -230,7 +230,7 @@ mod tests {
 }"#;
         let version_input = r#"
 {
-    "state": "Open"
+    "state": "open"
 }"#;
         // deserialize version and source for inputs
         let source = serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Source>(
@@ -288,7 +288,7 @@ mod tests {
     fn test_resource_in() {
         let in_output = GithubIssue::resource_in(
             None,
-            concourse::Version::new(String::from("Open")),
+            concourse::Version::new(String::from("open")),
             None,
             "",
         )

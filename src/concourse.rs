@@ -19,7 +19,7 @@ impl Version {
     /// # Examples
     ///
     /// ```
-    /// let version = Version::new(String::from("Open"));
+    /// let version = Version::new(String::from("open"));
     /// ```
     pub(crate) fn new(state: String) -> Self {
         Version { state }
@@ -186,9 +186,9 @@ mod tests {
     #[test]
     fn test_version_new() {
         assert_eq!(
-            Version::new(String::from("Open")),
+            Version::new(String::from("open")),
             Version {
-                state: String::from("Open")
+                state: String::from("open")
             },
             "version could not be constructed with the correct issue state",
         );
@@ -232,7 +232,7 @@ mod tests {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
     "number": 1,
-    "state": "Open",
+    "state": "open",
     "skip_check": false
 }"#;
         let source =
@@ -244,7 +244,7 @@ mod tests {
                 owner: String::from("mitodl"),
                 repo: String::from("ol-infrastructure"),
                 number: Some(1),
-                state: Some(String::from("Open")),
+                state: Some(String::from("open")),
                 milestone: None,
                 assignee: None,
                 labels: None,
