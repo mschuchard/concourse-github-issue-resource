@@ -29,22 +29,22 @@ impl ToString for Action {
 fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
     match param {
         "Open" => Ok(octocrab::models::IssueState::Open),
-        "Closed" => Ok(octocrab::models::IssueState::Closed),
+        "closed" => Ok(octocrab::models::IssueState::Closed),
         "All" => {
             log::warn!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
             log::warn!("the issue state will be reset to 'Open'");
             Ok(octocrab::models::IssueState::Open)
         }
-        &_ => Err("the issue state must be either Open or Closed"),
+        &_ => Err("the issue state must be either Open or closed"),
     }
 }
 
 fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
     match param {
         "Open" => Ok(octocrab::params::State::Open),
-        "Closed" => Ok(octocrab::params::State::Closed),
+        "closed" => Ok(octocrab::params::State::Closed),
         "All" => Ok(octocrab::params::State::All),
-        &_ => Err("the issue state must be either Open, Closed, or All"),
+        &_ => Err("the issue state must be either Open, closed, or All"),
     }
 }
 
@@ -353,9 +353,9 @@ mod tests {
         );
 
         assert_eq!(
-            str_to_issue_state("Closed"),
+            str_to_issue_state("closed"),
             Ok(octocrab::models::IssueState::Closed),
-            "failed to convert Closed str to Closed enum"
+            "failed to convert closed str to closed enum"
         );
     }
     #[test]
@@ -363,8 +363,8 @@ mod tests {
         // octocrab::params::State does not implement Eq
         str_to_params_state("Open")
             .expect("could not convert \"Open\" to octocrab::params::State::Open");
-        str_to_params_state("Closed")
-            .expect("could not convert \"Closed\" to octocrab::params::State::Closed");
+        str_to_params_state("closed")
+            .expect("could not convert \"closed\" to octocrab::params::State::Closed");
         str_to_params_state("All")
             .expect("could not convert \"All\" to octocrab::params::State::All");
     }

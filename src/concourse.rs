@@ -195,12 +195,12 @@ mod tests {
     }
     #[test]
     fn test_version_deserialize() {
-        let version = serde_json::from_str::<Version>("{\"state\": \"Closed\"}")
+        let version = serde_json::from_str::<Version>("{\"state\": \"closed\"}")
             .expect("version could not be deserialized");
         assert_eq!(
             version,
             Version {
-                state: String::from("Closed")
+                state: String::from("closed")
             },
             "version did not contain the expected member values",
         )
@@ -278,7 +278,7 @@ mod tests {
     "body": "approve the concourse step",
     "assignees": ["my_user_one", "my_user_two"],
     "milestone": 2,
-    "state": "Closed"
+    "state": "closed"
 }"#;
         let out_params = serde_json::from_str::<OutParams>(json_input)
             .expect("outparams could not be deserialized");
@@ -293,7 +293,7 @@ mod tests {
                     String::from("my_user_two")
                 ]),
                 milestone: Some(2),
-                state: Some(String::from("Closed")),
+                state: Some(String::from("closed")),
             },
             "out params did not contain the expected member values",
         )
