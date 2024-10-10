@@ -213,7 +213,7 @@ mod tests {
                 pat: None,
                 owner: String::from("myorg"),
                 repo: String::from("myrepo"),
-                state: Some(String::from("All")),
+                state: Some(String::from("all")),
                 number: None,
                 milestone: None,
                 assignee: None,

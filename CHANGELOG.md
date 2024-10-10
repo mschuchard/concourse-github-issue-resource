@@ -1,3 +1,6 @@
+### 1.2.0
+- Update issue state inputs to be lowercase for Octocrab consistency.
+
 ### 1.1.1
 - Update version outputs to be consistent with Octocrab serialization of state enums.
 - Update title parameter to be optional input in `out` step.

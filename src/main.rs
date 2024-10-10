@@ -17,7 +17,7 @@ impl concourse_resource::Resource for GithubIssue {
     type OutMetadata = concourse::OutMetadata;
 
     // implementations for steps
-    /// Performs the check step for the resource. Returns a single sized vector of version of state string if the input issue is Open (no trigger), and a two sized vector of version of state string if the input issue is closed (trigger). For convenience and standardization the former return is "open", and the latter is "open" and "closed".
+    /// Performs the check step for the resource. Returns a single sized vector of version of state string if the input issue is open (no trigger), and a two sized vector of version of state string if the input issue is closed (trigger). For convenience and standardization the former return is "open", and the latter is "open" and "closed".
     #[tokio::main]
     async fn resource_check(
         source: Option<Self::Source>,

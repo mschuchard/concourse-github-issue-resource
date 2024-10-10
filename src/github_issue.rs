@@ -30,8 +30,8 @@ fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str>
     match param {
         "open" => Ok(octocrab::models::IssueState::Open),
         "closed" => Ok(octocrab::models::IssueState::Closed),
-        "All" => {
-            log::warn!("All was specified for issue state, and this can only be utilized with issue filtering, and not updating");
+        "all" => {
+            log::warn!("all was specified for issue state, and this can only be utilized with issue filtering, and not updating");
             log::warn!("the issue state will be reset to 'open'");
             Ok(octocrab::models::IssueState::Open)
         }
@@ -43,8 +43,8 @@ fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
     match param {
         "open" => Ok(octocrab::params::State::Open),
         "closed" => Ok(octocrab::params::State::Closed),
-        "All" => Ok(octocrab::params::State::All),
-        &_ => Err("the issue state must be either open, closed, or All"),
+        "all" => Ok(octocrab::params::State::All),
+        &_ => Err("the issue state must be either open, closed, or all"),
     }
 }
 
@@ -365,8 +365,8 @@ mod tests {
             .expect("could not convert \"open\" to octocrab::params::State::open");
         str_to_params_state("closed")
             .expect("could not convert \"closed\" to octocrab::params::State::Closed");
-        str_to_params_state("All")
-            .expect("could not convert \"All\" to octocrab::params::State::All");
+        str_to_params_state("all")
+            .expect("could not convert \"all\" to octocrab::params::State::all");
     }
 
     #[test]
