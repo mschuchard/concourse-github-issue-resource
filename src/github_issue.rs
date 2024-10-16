@@ -1,7 +1,6 @@
 //! # Github Issue
 //!
 //! `github_issue` is a minimal utility to create and update issues within Github.
-
 use log;
 
 // allowed operations for github issue interactions

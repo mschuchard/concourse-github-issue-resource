@@ -1,7 +1,6 @@
 //! # Concourse
 //!
 //! `concourse` contains the structs for serialization to concourse outputs and deserialization from concourse inputs. Ordinarily more functionality is required here, but this crate leverages the concourse rust bindings to automatically provide functionality through trait implementations.
-
 use serde::{Deserialize, Serialize};
 
 use concourse_resource::IntoMetadataKV;

@@ -1,4 +1,4 @@
-### 1.2.0
+### 1.2.0 (Next)
 - Update issue state inputs to be lowercase for Octocrab consistency.
 
 ### 1.1.1
