@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["concourse","github_issue"],"struct":["GithubIssue"]};
