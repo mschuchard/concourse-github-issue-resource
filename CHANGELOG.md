@@ -1,5 +1,6 @@
 ### 1.2.0 (Next)
 - Update issue state inputs to be lowercase for Octocrab consistency.
+- Backup to default client if PAT fails.
 
 ### 1.1.1
 - Update version outputs to be consistent with Octocrab serialization of state enums.

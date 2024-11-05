@@ -119,7 +119,11 @@ impl<'issue> Issue<'issue> {
             Some(pat) => octocrab::Octocrab::builder()
                 .personal_token(pat.to_string())
                 .build()
-                .expect("could not authenticate client with Personal Access Token"),
+                .unwrap_or({
+                    log::warn!("could not authenticate client with Personal Access Token");
+                    log::warn!("will continue with unauthenticated client");
+                    octocrab::Octocrab::default()
+                }),
             None => octocrab::Octocrab::default(),
         };
         let issues = client.issues(self.owner, self.repo);
@@ -366,6 +370,10 @@ mod tests {
             .expect("could not convert \"closed\" to octocrab::params::State::Closed");
         str_to_params_state("all")
             .expect("could not convert \"all\" to octocrab::params::State::all");
+        assert_eq!(
+            str_to_params_state("foo").unwrap_err(),
+            "the issue state must be either open, closed, or all",
+        )
     }
 
     #[test]
