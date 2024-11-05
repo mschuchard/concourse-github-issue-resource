@@ -41,14 +41,12 @@ impl concourse_resource::Resource for GithubIssue {
         }
 
         // create longer lifetime bindings
-        let owner_binding = source.owner();
-        let repo_binding = source.repo();
         let state_binding = source.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
-            &owner_binding,
-            &repo_binding,
+            source.owner(),
+            source.repo(),
             None,
             None,
             source.labels(),
@@ -116,14 +114,12 @@ impl concourse_resource::Resource for GithubIssue {
         let params = params.expect("params is required for the Github Issue resource out/put step");
 
         // create longer lifetime bindings
-        let owner_binding = source.owner();
-        let repo_binding = source.repo();
         let state_binding = params.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
-            &owner_binding,
-            &repo_binding,
+            source.owner(),
+            source.repo(),
             params.title(),
             params.body(),
             params.labels(),

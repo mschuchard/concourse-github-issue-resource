@@ -14,9 +14,6 @@ pub(crate) struct Version {
 
 impl Version {
     /// Constructor
-    ///
-    /// # Examples
-    ///
     /// ```
     /// let version = Version::new(String::from("open"));
     /// ```
@@ -48,11 +45,11 @@ impl Source {
     pub(crate) fn pat(&self) -> Option<String> {
         return self.pat.clone();
     }
-    pub(crate) fn owner(&self) -> String {
-        return self.owner.clone();
+    pub(crate) fn owner(&self) -> &str {
+        return &self.owner;
     }
-    pub(crate) fn repo(&self) -> String {
-        return self.repo.clone();
+    pub(crate) fn repo(&self) -> &str {
+        return &self.repo;
     }
     pub(crate) fn number(&self) -> Option<u64> {
         return self.number;
@@ -133,9 +130,6 @@ pub(crate) struct OutMetadata {
 
 impl OutMetadata {
     /// Constructor
-    ///
-    /// # Examples
-    ///
     /// ```
     /// let metadata = OutMetadata::new(
     ///     5,

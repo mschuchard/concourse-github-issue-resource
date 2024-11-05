@@ -70,9 +70,6 @@ pub(crate) struct Issue<'issue> {
 
 impl<'issue> Issue<'issue> {
     /// Constructor for the Config struct. Contains all of the members necessary for instantiating a client and performing an action.
-    ///
-    /// # Examples
-    ///
     /// ```
     /// let gh_issue = Issue::new(None, String::from("my_org"), String::from("my_repo"), None, None, None, None, Some(100), None);
     /// ```
@@ -104,9 +101,6 @@ impl<'issue> Issue<'issue> {
     }
 
     /// Instantiate a reusable Octocrab issues object with input authentication, and an input owner and repo.
-    ///
-    /// # Examples
-    ///
     /// ```
     /// let issue = gh_issue.main(Action::Read).await?;
     /// ```
