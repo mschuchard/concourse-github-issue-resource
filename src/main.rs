@@ -40,8 +40,6 @@ impl concourse_resource::Resource for GithubIssue {
             ];
         }
 
-        // create longer lifetime bindings
-        let state_binding = source.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
@@ -52,7 +50,7 @@ impl concourse_resource::Resource for GithubIssue {
             source.labels(),
             source.assignee(),
             source.number(),
-            state_binding.as_deref(),
+            source.state(),
             source.milestone(),
         );
         // ...determine the action...
@@ -113,8 +111,6 @@ impl concourse_resource::Resource for GithubIssue {
         let source = source.expect("source is required for the Github Issue resource");
         let params = params.expect("params is required for the Github Issue resource out/put step");
 
-        // create longer lifetime bindings
-        let state_binding = params.state();
         // construct an issue...
         let gh_issue = github_issue::Issue::new(
             source.pat(),
@@ -125,7 +121,7 @@ impl concourse_resource::Resource for GithubIssue {
             params.labels(),
             params.assignees(),
             source.number(),
-            state_binding.as_deref(),
+            params.state(),
             params.milestone(),
         );
         // ...determine the action...

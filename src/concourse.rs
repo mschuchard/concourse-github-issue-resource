@@ -54,8 +54,8 @@ impl Source {
     pub(crate) fn number(&self) -> Option<u64> {
         return self.number;
     }
-    pub(crate) fn state(&self) -> Option<String> {
-        return self.state.clone();
+    pub(crate) fn state(&self) -> Option<&str> {
+        return self.state.as_deref();
     }
     pub(crate) fn milestone(&self) -> Option<u64> {
         return self.milestone;
@@ -106,8 +106,8 @@ impl OutParams {
     pub(crate) fn milestone(&self) -> Option<u64> {
         return self.milestone;
     }
-    pub(crate) fn state(&self) -> Option<String> {
-        return self.state.clone();
+    pub(crate) fn state(&self) -> Option<&str> {
+        return self.state.as_deref();
     }
 }
 
