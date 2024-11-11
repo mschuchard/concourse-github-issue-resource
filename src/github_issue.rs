@@ -13,9 +13,9 @@ pub(crate) enum Action {
     Update,
 }
 
-impl ToString for Action {
-    fn to_string(&self) -> String {
-        match &self {
+impl From<Action> for String {
+    fn from(action: Action) -> Self {
+        match action {
             Action::Create => String::from("Create"),
             Action::List => String::from("List"),
             Action::Read => String::from("Read"),
@@ -336,8 +336,8 @@ mod tests {
     #[test]
     fn test_action_to_string() {
         // validates ToString trait impl for action enum
-        assert_eq!(Action::Create.to_string(), String::from("Create"));
-        assert_eq!(Action::Read.to_string(), String::from("Read"));
+        assert_eq!(String::from(Action::Create), String::from("Create"));
+        assert_eq!(String::from(Action::Read), String::from("Read"));
     }
 
     #[test]

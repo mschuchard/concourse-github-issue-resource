@@ -140,11 +140,11 @@ impl concourse_resource::Resource for GithubIssue {
                 log::error!("{error}");
                 panic!(
                     "the out/put step was unable to {} the associated github issue",
-                    action.to_string()
+                    String::from(action)
                 );
             }
         };
-        log::info!("successful {} for the github issue", action.to_string());
+        log::info!("successful {} for the github issue", String::from(action));
 
         if source.number().is_none() {
             // store created issue number in file for subsequent check step
