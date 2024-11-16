@@ -1,4 +1,4 @@
-### 1.2.0 (Next)
+### 1.2.0
 - Update issue state inputs to be lowercase for Octocrab consistency.
 - Backup to default client if PAT fails.
 

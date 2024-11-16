@@ -23,7 +23,7 @@ This repository and project is based on the work performed for [MITODL](https://
 
 The following parameters are for filtering from a list of issues to one issue (i.e. "search") during the `check` step, and therefore their values are ignored when an input value is specified for the `number` parameter.
 
-- `state`: _optional_ The current state of the searched issue. This can be either `Open`, `Closed`, or `All`.
+- `state`: _optional_ The current state of the searched issue. This can be either `open`, `closed`, or `all`.
 
 - `milestone`: _optional_ The numeric ID of the milestone associated with the searched issue.
 
@@ -34,23 +34,23 @@ The following parameters are for filtering from a list of issues to one issue (i
 ### `version`: designates the Github issue state
 
 **parameters**
-- `version`: _optional_ The state of the issue specified in the `source` expressed as the enum `Closed` or `Open` (note the states' serialization is implemented by Octocrab to be lowercase strings). This is an output only and is ignored as an input parameter.
+- `version`: _optional_ The state of the issue specified in the `source` expressed as the enum `closed` or `open` (note the states' serialization is implemented by Octocrab to be lowercase strings). This is an output only and is ignored as an input parameter.
 
 ```yaml
 version:
   state: <issue state>
 ```
 
-### `check`: returns size two list for Closed Github issues and size one list for Open Github issues
+### `check`: returns size two list for closed Github issues and size one list for open Github issues
 
-The `check` step determines the state of the specified Github issue. If the state is `Closed` then the returned list of versions is size two. If the state is `Open` then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`Closed` triggers and `Open` does not trigger) because it simulates a delta of versions for `Closed` and not `Open`. The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
+The `check` step determines the state of the specified Github issue. If the state is `closed` then the returned list of versions is size two. If the state is `open` then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`closed` triggers and `open` does not trigger) because it simulates a delta of versions for `closed` and not `open`. The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
 
-Closed:
+closed:
 ```json
 [{"state":"open"},{"state":"closed"}]
 ```
 
-Open:
+open:
 ```json
 [{"state":"open"}]
 ```
@@ -77,7 +77,7 @@ The metadata output from this step contains the number, url, title, state, label
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
-- `state`: _optional_ The desired state of the updated issue. This can be either `Open` or `Closed`.
+- `state`: _optional_ The desired state of the updated issue. This can be either `open` or `closed`.
 
 ### Metadata
 
