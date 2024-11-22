@@ -42,8 +42,8 @@ pub(crate) struct Source {
 
 impl Source {
     /// Readers
-    pub(crate) fn pat(&self) -> Option<String> {
-        return self.pat.clone();
+    pub(crate) fn pat(&self) -> Option<&str> {
+        return self.pat.as_deref();
     }
     pub(crate) fn owner(&self) -> &str {
         return &self.owner;
@@ -91,11 +91,11 @@ pub(crate) struct OutParams {
 
 impl OutParams {
     /// Readers
-    pub(crate) fn title(&self) -> Option<String> {
-        return self.title.clone();
+    pub(crate) fn title(&self) -> Option<&str> {
+        return self.title.as_deref();
     }
-    pub(crate) fn body(&self) -> Option<String> {
-        return self.body.clone();
+    pub(crate) fn body(&self) -> Option<&str> {
+        return self.body.as_deref();
     }
     pub(crate) fn labels(&self) -> Option<Vec<String>> {
         return self.labels.clone();

@@ -52,12 +52,12 @@ fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
 #[derive(Eq, PartialEq, Debug)]
 pub(crate) struct Issue<'issue> {
     // client and issues: OctocrabBuilder and issues::IssueHandler
-    pat: Option<String>,
+    pat: Option<&'issue str>,
     owner: &'issue str,
     repo: &'issue str,
     // create and update (octocrab update expects AsRef<str> instead of String and AsRef<[String]> instead of Vec<String>)
-    title: Option<String>,
-    body: Option<String>,
+    title: Option<&'issue str>,
+    body: Option<&'issue str>,
     labels: Option<Vec<String>>,
     assignees: Option<Vec<String>>,
     // read and update
@@ -74,11 +74,11 @@ impl<'issue> Issue<'issue> {
     /// let gh_issue = Issue::new(None, String::from("my_org"), String::from("my_repo"), None, None, None, None, Some(100), None);
     /// ```
     pub(crate) fn new(
-        pat: Option<String>,
+        pat: Option<&'issue str>,
         owner: &'issue str,
         repo: &'issue str,
-        title: Option<String>,
-        body: Option<String>,
+        title: Option<&'issue str>,
+        body: Option<&'issue str>,
         labels: Option<Vec<String>>,
         assignees: Option<Vec<String>>,
         number: Option<u64>,
@@ -142,7 +142,7 @@ impl<'issue> Issue<'issue> {
         issues: octocrab::issues::IssueHandler<'octo>,
     ) -> Result<octocrab::models::issues::Issue, &str> {
         // validate a title was specified
-        match &self.title {
+        match self.title {
             // title specified
             Some(title) => {
                 // build the issue
@@ -150,7 +150,7 @@ impl<'issue> Issue<'issue> {
                 let mut issue = issues.create(title).milestone(self.milestone);
                 // ... with optional parameters
                 if self.body.is_some() {
-                    issue = issue.body(self.body.as_ref().unwrap());
+                    issue = issue.body(self.body.unwrap());
                 }
                 if self.labels.is_some() {
                     issue = issue.labels(self.labels.clone());

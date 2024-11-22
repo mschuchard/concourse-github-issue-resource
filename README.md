@@ -109,7 +109,7 @@ resource_types:
 - name: github_issue
   type: docker-image
   source:
-    repository: matthewschuchard/concourse-github-issue-resource:1.1
+    repository: matthewschuchard/concourse-github-issue-resource:1.2
     tag: latest
 
 resources:
