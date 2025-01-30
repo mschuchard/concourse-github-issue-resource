@@ -91,6 +91,7 @@ impl concourse_resource::Resource for GithubIssue {
         _ = env_logger::try_init();
 
         log::info!("reminder: the in step is only to be used for an efficient check step with minimal overhead");
+        log::info!("there is no actual functionality for the in step, and the version and metadata are dummied");
         Ok(concourse_resource::InOutput {
             version: concourse::Version::new(String::from("open")),
             metadata: None,
@@ -219,7 +220,8 @@ mod tests {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
     "assignee": "pdpinch",
-    "milestone": 3
+    "milestone": 3,
+    "state": "closed"
 }"#;
         let version_input = r#"
 {
@@ -239,8 +241,8 @@ mod tests {
         // the issue is open so we expect a size one vec
         assert_eq!(
             version_vec,
-            vec![concourse::Version::new(String::from("open"))],
-            "the resource_check did not return a one size vector of issue states for an open issue",
+            vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
+                "the resource_check did not return a one size vector of issue states for a closed issue",
         );
     }
 
