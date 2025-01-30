@@ -4,7 +4,7 @@ version = "1.2.0"
 edition = "2021"
 
 [dependencies]
-octocrab  = "0.42"
+octocrab  = "0.43"
 concourse-resource = "0.3"
 tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
 serde = "1.0"

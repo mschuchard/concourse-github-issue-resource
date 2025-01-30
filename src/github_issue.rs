@@ -473,14 +473,14 @@ mod tests {
                 None,
                 Some(vec![String::from("pdpinch")]),
                 None,
-                Some("open"),
-                None,
+                Some("closed"),
+                Some(3),
             );
             let issue = gh_issue.main(Action::List).await;
             assert_eq!(
                 issue.unwrap().number,
-                497,
-                "single issue #497 from multiple listed from mitodl/ol-infrastructure not returned correctly",
+                833,
+                "single issue #833 from multiple listed from mitodl/ol-infrastructure not returned correctly",
             );
         };
         let rt = tokio::runtime::Runtime::new().unwrap();

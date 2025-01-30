@@ -218,11 +218,12 @@ mod tests {
 {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
-    "assignee": "pdpinch"
+    "assignee": "pdpinch",
+    "milestone": 3
 }"#;
         let version_input = r#"
 {
-    "state": "open"
+    "state": "closed"
 }"#;
         // deserialize version and source for inputs
         let source = serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Source>(
@@ -255,7 +256,7 @@ mod tests {
 }"#;
         let version_input = r#"
 {
-    "state": "closed"
+    "state": "open"
 }"#;
         // deserialize version and source for inputs
         let source = serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Source>(
