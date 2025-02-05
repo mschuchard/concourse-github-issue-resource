@@ -20,6 +20,7 @@ impl From<Action> for String {
             Action::List => String::from("List"),
             Action::Read => String::from("Read"),
             Action::Update => String::from("Update"),
+            _ => String::from("Unknown"),
         }
     }
 }
@@ -120,7 +121,9 @@ impl<'issue> Issue<'issue> {
                 }),
             None => octocrab::Octocrab::default(),
         };
+        log::debug!("built octocrab client");
         let issues = client.issues(self.owner, self.repo);
+        log::debug!("built octocrab issues");
         // execute action and assign returned issue
         let issue = match action {
             // create an issue
@@ -132,6 +135,7 @@ impl<'issue> Issue<'issue> {
             // update an issue
             Action::Update => self.update(issues).await?,
         };
+        log::debug!("issue interfacing completed");
 
         Ok(issue)
     }
@@ -161,6 +165,8 @@ impl<'issue> Issue<'issue> {
                 if self.milestone.is_some() {
                     issue = issue.milestone(self.milestone);
                 }
+
+                log::debug!("creating issue");
                 // send and await the issue
                 match issue.send().await {
                     // return created issue
@@ -190,6 +196,7 @@ impl<'issue> Issue<'issue> {
         match self.number {
             // issue number specified
             Some(number) => {
+                log::debug!("reading issue");
                 // retrieve the issue with the handler
                 match issues.get(number).await {
                     Ok(issue) => return Ok(issue),
@@ -245,6 +252,8 @@ impl<'issue> Issue<'issue> {
             let labels = self.labels.clone().unwrap();
             issue_page = issue_page.labels(&labels[..]);
         }*/
+
+        log::debug!("listing issues");
         // send and await the issue page
         let page = match issue_page.send().await {
             // return issue pages
@@ -306,6 +315,8 @@ impl<'issue> Issue<'issue> {
                 if self.milestone.is_some() {
                     issue = issue.milestone(self.milestone.unwrap());
                 }
+
+                log::debug!("updating issue");
                 // send and await the issue
                 match issue.send().await {
                     // return updated issue

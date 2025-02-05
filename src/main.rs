@@ -66,7 +66,10 @@ impl concourse_resource::Resource for GithubIssue {
                 panic!("the check step was unable to return a github issue from the source values");
             }
         };
-        log::info!("the github issue information was successfully retrieved");
+        log::info!(
+            "the github issue information was successfully retrieved for number {}",
+            issue.number
+        );
 
         // return one sized version vector if issue is open and two sized if closed
         match issue.state {
@@ -141,7 +144,11 @@ impl concourse_resource::Resource for GithubIssue {
                 );
             }
         };
-        log::info!("successful {} for the github issue", String::from(action));
+        log::info!(
+            "successful {} for the github issue number {}",
+            String::from(action),
+            issue.number
+        );
 
         if source.number().is_none() {
             // store created issue number in file for subsequent check step
