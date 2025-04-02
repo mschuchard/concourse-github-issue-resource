@@ -14,6 +14,7 @@ pub(crate) enum Action {
 }
 
 impl From<Action> for String {
+    #[allow(unreachable_patterns)]
     fn from(action: Action) -> Self {
         match action {
             Action::Create => String::from("Create"),
