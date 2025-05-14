@@ -73,9 +73,16 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return one sized version vector if issue is open and two sized if closed
         match issue.state {
-            octocrab::models::IssueState::Open => vec![concourse::Version::new(String::from("open"))],
-            octocrab::models::IssueState::Closed => vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
-            _ => panic!("expected the github issue state to either be open or closed, and somehow it is something else")
+            octocrab::models::IssueState::Open => {
+                vec![concourse::Version::new(String::from("open"))]
+            }
+            octocrab::models::IssueState::Closed => vec![
+                concourse::Version::new(String::from("open")),
+                concourse::Version::new(String::from("closed")),
+            ],
+            _ => panic!(
+                "expected the github issue state to either be open or closed, and somehow it is something else"
+            ),
         }
     }
 
@@ -93,8 +100,12 @@ impl concourse_resource::Resource for GithubIssue {
         // init logger
         _ = env_logger::try_init();
 
-        log::info!("reminder: the in step is only to be used for an efficient check step with minimal overhead");
-        log::info!("there is no actual functionality for the in step, and the version and metadata are dummied");
+        log::info!(
+            "reminder: the in step is only to be used for an efficient check step with minimal overhead"
+        );
+        log::info!(
+            "there is no actual functionality for the in step, and the version and metadata are dummied"
+        );
         Ok(concourse_resource::InOutput {
             version: concourse::Version::new(String::from("open")),
             metadata: None,
@@ -212,10 +223,13 @@ mod tests {
         let version_vec = GithubIssue::resource_check(Some(source), Some(version));
         // the issue is closed so we expect a size two vec
         assert_eq!(
-                version_vec,
-                vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
-                "the resource_check did not return a two size vector of issue states for a closed issue",
-            );
+            version_vec,
+            vec![
+                concourse::Version::new(String::from("open")),
+                concourse::Version::new(String::from("closed"))
+            ],
+            "the resource_check did not return a two size vector of issue states for a closed issue",
+        );
     }
 
     #[test]
@@ -248,8 +262,11 @@ mod tests {
         // the issue is open so we expect a size one vec
         assert_eq!(
             version_vec,
-            vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
-                "the resource_check did not return a one size vector of issue states for a closed issue",
+            vec![
+                concourse::Version::new(String::from("open")),
+                concourse::Version::new(String::from("closed"))
+            ],
+            "the resource_check did not return a one size vector of issue states for a closed issue",
         );
     }
 
@@ -280,10 +297,13 @@ mod tests {
         let version_vec = GithubIssue::resource_check(Some(source), Some(version));
         // skip check step requested so we expect size two vec
         assert_eq!(
-                version_vec,
-                vec![concourse::Version::new(String::from("open")), concourse::Version::new(String::from("closed"))],
-                "the resource_check did not return a two size vector of issue states for a requested check skip",
-            );
+            version_vec,
+            vec![
+                concourse::Version::new(String::from("open")),
+                concourse::Version::new(String::from("closed"))
+            ],
+            "the resource_check did not return a two size vector of issue states for a requested check skip",
+        );
     }
 
     #[test]

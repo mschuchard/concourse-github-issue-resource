@@ -32,7 +32,9 @@ fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str>
         "open" => Ok(octocrab::models::IssueState::Open),
         "closed" => Ok(octocrab::models::IssueState::Closed),
         "all" => {
-            log::warn!("all was specified for issue state, and this can only be utilized with issue filtering, and not updating");
+            log::warn!(
+                "all was specified for issue state, and this can only be utilized with issue filtering, and not updating"
+            );
             log::warn!("the issue state will be reset to 'open'");
             Ok(octocrab::models::IssueState::Open)
         }
@@ -242,7 +244,9 @@ impl<'issue> Issue<'issue> {
             let num_assignees = self.assignees.as_ref().unwrap().len();
             if num_assignees != 1 {
                 log::error!("list action attempted with other than one assignee: {num_assignees}");
-                log::error!("this is an error with custom resource frontend and backend interfacing, and should be reported");
+                log::error!(
+                    "this is an error with custom resource frontend and backend interfacing, and should be reported"
+                );
                 return Err("multiple assignees and list action");
             }
             // assign value of only assignee and use for assignee filter
