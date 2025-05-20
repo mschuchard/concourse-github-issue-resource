@@ -38,6 +38,8 @@ pub(super) struct Source {
     labels: Option<Vec<String>>,
     // for skipping check during e.g. put+create
     skip_check: Option<bool>,
+    // trigger on issue state open or closed
+    trigger: Option<octocrab::models::IssueState>,
 }
 
 impl Source {
@@ -73,6 +75,13 @@ impl Source {
     // return unwrapped value with default false for ease of use
     pub(super) fn skip_check(&self) -> bool {
         return self.skip_check.unwrap_or(false);
+    }
+    // return unwrapped value with default closed for ease of use
+    pub(super) fn trigger(&self) -> octocrab::models::IssueState {
+        return self
+            .trigger
+            .clone()
+            .unwrap_or(octocrab::models::IssueState::Closed);
     }
 }
 
@@ -212,6 +221,7 @@ mod tests {
                 assignee: None,
                 labels: None,
                 skip_check: None,
+                trigger: None,
             }
             .owner,
             String::from("myorg"),
@@ -226,7 +236,8 @@ mod tests {
     "repo": "ol-infrastructure",
     "number": 1,
     "state": "open",
-    "skip_check": false
+    "skip_check": false,
+    "trigger": "open"
 }"#;
         let source =
             serde_json::from_str::<Source>(json_input).expect("source could not be deserialized");
@@ -242,6 +253,7 @@ mod tests {
                 assignee: None,
                 labels: None,
                 skip_check: Some(false),
+                trigger: Some(octocrab::models::IssueState::Open)
             },
             "source did not contain the expected member values",
         )
