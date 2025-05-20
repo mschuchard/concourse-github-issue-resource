@@ -6,7 +6,7 @@ use log;
 // allowed operations for github issue interactions
 #[non_exhaustive]
 #[derive(Copy, Clone)]
-pub(crate) enum Action {
+pub(super) enum Action {
     Create,
     List,
     Read,
@@ -54,7 +54,7 @@ fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
 // struct for general interfacing with module
 // the types correspond to octocrab when not advantageous otherwise
 #[derive(Eq, PartialEq, Debug)]
-pub(crate) struct Issue<'issue> {
+pub(super) struct Issue<'issue> {
     // client and issues: OctocrabBuilder and issues::IssueHandler
     pat: Option<&'issue str>,
     owner: &'issue str,
@@ -77,7 +77,7 @@ impl<'issue> Issue<'issue> {
     /// ```
     /// let gh_issue = Issue::new(None, String::from("my_org"), String::from("my_repo"), None, None, None, None, Some(100), None);
     /// ```
-    pub(crate) fn new(
+    pub(super) fn new(
         pat: Option<&'issue str>,
         owner: &'issue str,
         repo: &'issue str,
@@ -108,7 +108,7 @@ impl<'issue> Issue<'issue> {
     /// ```
     /// let issue = gh_issue.main(Action::Read).await?;
     /// ```
-    pub(crate) async fn main<'octo>(
+    pub(super) async fn main<'octo>(
         &self,
         action: Action,
     ) -> Result<octocrab::models::issues::Issue, &str> {

@@ -8,7 +8,7 @@ use concourse_resource::IntoMetadataKV;
 // standard concourse structs
 // check input and (vec seralized to list) output, out output
 #[derive(Eq, PartialEq, Serialize, Deserialize, Debug)]
-pub(crate) struct Version {
+pub(super) struct Version {
     state: String,
 }
 
@@ -17,14 +17,14 @@ impl Version {
     /// ```
     /// let version = Version::new(String::from("open"));
     /// ```
-    pub(crate) fn new(state: String) -> Self {
+    pub(super) fn new(state: String) -> Self {
         Version { state }
     }
 }
 
 // check and out input
 #[derive(Eq, PartialEq, Deserialize, Debug)]
-pub(crate) struct Source {
+pub(super) struct Source {
     // client and issues; owner and repo later converted to &str
     pat: Option<String>,
     owner: String,
@@ -42,43 +42,43 @@ pub(crate) struct Source {
 
 impl Source {
     /// Readers
-    pub(crate) fn pat(&self) -> Option<&str> {
+    pub(super) fn pat(&self) -> Option<&str> {
         return self.pat.as_deref();
     }
-    pub(crate) fn owner(&self) -> &str {
+    pub(super) fn owner(&self) -> &str {
         return &self.owner;
     }
-    pub(crate) fn repo(&self) -> &str {
+    pub(super) fn repo(&self) -> &str {
         return &self.repo;
     }
-    pub(crate) fn number(&self) -> Option<u64> {
+    pub(super) fn number(&self) -> Option<u64> {
         return self.number;
     }
-    pub(crate) fn state(&self) -> Option<&str> {
+    pub(super) fn state(&self) -> Option<&str> {
         return self.state.as_deref();
     }
-    pub(crate) fn milestone(&self) -> Option<u64> {
+    pub(super) fn milestone(&self) -> Option<u64> {
         return self.milestone;
     }
-    pub(crate) fn assignee(&self) -> Option<Vec<String>> {
+    pub(super) fn assignee(&self) -> Option<Vec<String>> {
         // convert assignee to single element string vector for compatibility with github issue constructor
         return match self.assignee.clone() {
             Some(assignee) => Some(vec![assignee]),
             None => None,
         };
     }
-    pub(crate) fn labels(&self) -> Option<Vec<String>> {
+    pub(super) fn labels(&self) -> Option<Vec<String>> {
         return self.labels.clone();
     }
     // return unwrapped value with default false for ease of use
-    pub(crate) fn skip_check(&self) -> bool {
+    pub(super) fn skip_check(&self) -> bool {
         return self.skip_check.unwrap_or(false);
     }
 }
 
 // out input
 #[derive(Eq, PartialEq, Deserialize, Debug, Default)]
-pub(crate) struct OutParams {
+pub(super) struct OutParams {
     // title and state later converted to &str
     title: Option<String>,
     body: Option<String>,
@@ -91,29 +91,29 @@ pub(crate) struct OutParams {
 
 impl OutParams {
     /// Readers
-    pub(crate) fn title(&self) -> Option<&str> {
+    pub(super) fn title(&self) -> Option<&str> {
         return self.title.as_deref();
     }
-    pub(crate) fn body(&self) -> Option<&str> {
+    pub(super) fn body(&self) -> Option<&str> {
         return self.body.as_deref();
     }
-    pub(crate) fn labels(&self) -> Option<Vec<String>> {
+    pub(super) fn labels(&self) -> Option<Vec<String>> {
         return self.labels.clone();
     }
-    pub(crate) fn assignees(&self) -> Option<Vec<String>> {
+    pub(super) fn assignees(&self) -> Option<Vec<String>> {
         return self.assignees.clone();
     }
-    pub(crate) fn milestone(&self) -> Option<u64> {
+    pub(super) fn milestone(&self) -> Option<u64> {
         return self.milestone;
     }
-    pub(crate) fn state(&self) -> Option<&str> {
+    pub(super) fn state(&self) -> Option<&str> {
         return self.state.as_deref();
     }
 }
 
 // out output
 #[derive(Eq, PartialEq, Serialize, Debug, IntoMetadataKV)]
-pub(crate) struct OutMetadata {
+pub(super) struct OutMetadata {
     number: u64,
     url: String,
     title: String,
@@ -143,7 +143,7 @@ impl OutMetadata {
     ///     String::from("today"),
     /// ),
     /// ```
-    pub(crate) fn new(
+    pub(super) fn new(
         // ref: https://docs.rs/octocrab/latest/octocrab/models/issues/struct.Issue.html
         number: u64,
         url: impl Into<String>,
