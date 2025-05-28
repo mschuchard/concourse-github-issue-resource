@@ -9,15 +9,15 @@ use concourse_resource::IntoMetadataKV;
 // check input and (vec seralized to list) output, out output
 #[derive(Eq, PartialEq, Serialize, Deserialize, Debug)]
 pub(super) struct Version {
-    state: String,
+    state: octocrab::models::IssueState,
 }
 
 impl Version {
     /// Constructor
     /// ```
-    /// let version = Version::new(String::from("open"));
+    /// let version = Version::new(octocrab::models::IssueState::Closed);
     /// ```
-    pub(super) fn new(state: String) -> Self {
+    pub(super) fn new(state: octocrab::models::IssueState) -> Self {
         Version { state }
     }
 }
@@ -188,9 +188,9 @@ mod tests {
     #[test]
     fn test_version_new() {
         assert_eq!(
-            Version::new(String::from("open")),
+            Version::new(octocrab::models::IssueState::Open),
             Version {
-                state: String::from("open")
+                state: octocrab::models::IssueState::Open
             },
             "version could not be constructed with the correct issue state",
         );
@@ -202,7 +202,7 @@ mod tests {
         assert_eq!(
             version,
             Version {
-                state: String::from("closed")
+                state: octocrab::models::IssueState::Closed
             },
             "version did not contain the expected member values",
         )

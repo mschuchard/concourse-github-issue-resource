@@ -35,8 +35,8 @@ impl concourse_resource::Resource for GithubIssue {
                 "the check step will be skipped because 'skip_check' was set to true in source"
             );
             return vec![
-                concourse::Version::new(String::from("open")),
-                concourse::Version::new(String::from("closed")),
+                concourse::Version::new(octocrab::models::IssueState::Open),
+                concourse::Version::new(octocrab::models::IssueState::Closed),
             ];
         }
 
@@ -74,11 +74,11 @@ impl concourse_resource::Resource for GithubIssue {
         // return two sized version vector if issue state matches trigger, and one sized if otherwise
         if issue.state == source.trigger() {
             vec![
-                concourse::Version::new(String::from("open")),
-                concourse::Version::new(String::from("closed")),
+                concourse::Version::new(octocrab::models::IssueState::Open),
+                concourse::Version::new(octocrab::models::IssueState::Closed),
             ]
         } else {
-            vec![concourse::Version::new(String::from("open"))]
+            vec![concourse::Version::new(octocrab::models::IssueState::Open)]
         }
     }
 
@@ -103,7 +103,7 @@ impl concourse_resource::Resource for GithubIssue {
             "there is no actual functionality for the in step, and the version and metadata are dummied"
         );
         Ok(concourse_resource::InOutput {
-            version: concourse::Version::new(String::from("open")),
+            version: concourse::Version::new(octocrab::models::IssueState::Open),
             metadata: None,
         })
     }
@@ -167,7 +167,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return out step output
         concourse_resource::OutOutput {
-            version: concourse::Version::new(String::from("open")),
+            version: concourse::Version::new(octocrab::models::IssueState::Open),
             metadata: Some(concourse::OutMetadata::new(
                 issue.number,
                 issue.url,
@@ -221,8 +221,8 @@ mod tests {
         assert_eq!(
             version_vec,
             vec![
-                concourse::Version::new(String::from("open")),
-                concourse::Version::new(String::from("closed"))
+                concourse::Version::new(octocrab::models::IssueState::Open),
+                concourse::Version::new(octocrab::models::IssueState::Closed)
             ],
             "the resource_check did not return a two size vector of issue states for a closed issue",
         );
@@ -259,7 +259,7 @@ mod tests {
         // the issue is closed and trigger is open so we expect a size one vec
         assert_eq!(
             version_vec,
-            vec![concourse::Version::new(String::from("open"))],
+            vec![concourse::Version::new(octocrab::models::IssueState::Open)],
             "the resource_check did not return a one size vector of issue states for an issue with differing trigger and state",
         );
     }
@@ -293,8 +293,8 @@ mod tests {
         assert_eq!(
             version_vec,
             vec![
-                concourse::Version::new(String::from("open")),
-                concourse::Version::new(String::from("closed"))
+                concourse::Version::new(octocrab::models::IssueState::Open),
+                concourse::Version::new(octocrab::models::IssueState::Closed)
             ],
             "the resource_check did not return a two size vector of issue states for a requested check skip",
         );
@@ -304,14 +304,14 @@ mod tests {
     fn test_resource_in() {
         let in_output = GithubIssue::resource_in(
             None,
-            concourse::Version::new(String::from("open")),
+            concourse::Version::new(octocrab::models::IssueState::Open),
             None,
             "",
         )
         .unwrap();
         assert_eq!(
             in_output.version,
-            concourse::Version::new(String::from("open")),
+            concourse::Version::new(octocrab::models::IssueState::Open),
             "the resource in did not dummy the expected return version output",
         );
     }
