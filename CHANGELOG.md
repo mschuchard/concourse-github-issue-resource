@@ -1,3 +1,6 @@
+### 1.2.1 (Next)
+- Enable Github issue state `check` step trigger customization.
+
 ### 1.2.0
 - Update issue state inputs to be lowercase for Octocrab consistency.
 - Backup to default client if PAT fails.

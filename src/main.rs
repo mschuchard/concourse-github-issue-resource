@@ -71,18 +71,14 @@ impl concourse_resource::Resource for GithubIssue {
             issue.number
         );
 
-        // return one sized version vector if issue is open and two sized if closed
-        match issue.state {
-            octocrab::models::IssueState::Open => {
-                vec![concourse::Version::new(String::from("open"))]
-            }
-            octocrab::models::IssueState::Closed => vec![
+        // return two sized version vector if issue state matches trigger, and one sized if otherwise
+        if issue.state == source.trigger() {
+            vec![
                 concourse::Version::new(String::from("open")),
                 concourse::Version::new(String::from("closed")),
-            ],
-            _ => panic!(
-                "expected the github issue state to either be open or closed, and somehow it is something else"
-            ),
+            ]
+        } else {
+            vec![concourse::Version::new(String::from("open"))]
         }
     }
 
@@ -234,12 +230,13 @@ mod tests {
 
     #[test]
     fn test_resource_check_list() {
-        // validate basic check listing from mitodl/ol-infrastructure and filtering to issue 497
+        // validate basic check listing from mitodl/ol-infrastructure and filtering to issue 833
         // concourse pipeline json input
         let source_input = r#"
 {
     "owner": "mitodl",
     "repo": "ol-infrastructure",
+    "trigger": "open",
     "assignee": "pdpinch",
     "milestone": 3,
     "state": "closed"
@@ -259,14 +256,11 @@ mod tests {
             )
             .expect("version could not be deserialized");
         let version_vec = GithubIssue::resource_check(Some(source), Some(version));
-        // the issue is open so we expect a size one vec
+        // the issue is closed and trigger is open so we expect a size one vec
         assert_eq!(
             version_vec,
-            vec![
-                concourse::Version::new(String::from("open")),
-                concourse::Version::new(String::from("closed"))
-            ],
-            "the resource_check did not return a one size vector of issue states for a closed issue",
+            vec![concourse::Version::new(String::from("open"))],
+            "the resource_check did not return a one size vector of issue states for an issue with differing trigger and state",
         );
     }
 
