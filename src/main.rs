@@ -1,6 +1,8 @@
-use concourse_resource::*;
 use env_logger;
 use log;
+
+use concourse_resource::*;
+use octocrab;
 
 mod concourse;
 mod github_issue;

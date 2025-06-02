@@ -4,6 +4,7 @@
 use serde::{Deserialize, Serialize};
 
 use concourse_resource::IntoMetadataKV;
+use octocrab;
 
 // standard concourse structs
 // check input and (vec seralized to list) output, out output
@@ -45,43 +46,42 @@ pub(super) struct Source {
 impl Source {
     /// Readers
     pub(super) fn pat(&self) -> Option<&str> {
-        return self.pat.as_deref();
+        self.pat.as_deref()
     }
     pub(super) fn owner(&self) -> &str {
-        return &self.owner;
+        &self.owner
     }
     pub(super) fn repo(&self) -> &str {
-        return &self.repo;
+        &self.repo
     }
     pub(super) fn number(&self) -> Option<u64> {
-        return self.number;
+        self.number
     }
     pub(super) fn state(&self) -> Option<&str> {
-        return self.state.as_deref();
+        self.state.as_deref()
     }
     pub(super) fn milestone(&self) -> Option<u64> {
-        return self.milestone;
+        self.milestone
     }
     pub(super) fn assignee(&self) -> Option<Vec<String>> {
         // convert assignee to single element string vector for compatibility with github issue constructor
-        return match self.assignee.clone() {
+        match self.assignee.clone() {
             Some(assignee) => Some(vec![assignee]),
             None => None,
-        };
+        }
     }
     pub(super) fn labels(&self) -> Option<Vec<String>> {
-        return self.labels.clone();
+        self.labels.clone()
     }
     // return unwrapped value with default false for ease of use
     pub(super) fn skip_check(&self) -> bool {
-        return self.skip_check.unwrap_or(false);
+        self.skip_check.unwrap_or(false)
     }
     // return unwrapped value with default closed for ease of use
     pub(super) fn trigger(&self) -> octocrab::models::IssueState {
-        return self
-            .trigger
+        self.trigger
             .clone()
-            .unwrap_or(octocrab::models::IssueState::Closed);
+            .unwrap_or(octocrab::models::IssueState::Closed)
     }
 }
 
@@ -101,22 +101,22 @@ pub(super) struct OutParams {
 impl OutParams {
     /// Readers
     pub(super) fn title(&self) -> Option<&str> {
-        return self.title.as_deref();
+        self.title.as_deref()
     }
     pub(super) fn body(&self) -> Option<&str> {
-        return self.body.as_deref();
+        self.body.as_deref()
     }
     pub(super) fn labels(&self) -> Option<Vec<String>> {
-        return self.labels.clone();
+        self.labels.clone()
     }
     pub(super) fn assignees(&self) -> Option<Vec<String>> {
-        return self.assignees.clone();
+        self.assignees.clone()
     }
     pub(super) fn milestone(&self) -> Option<u64> {
-        return self.milestone;
+        self.milestone
     }
     pub(super) fn state(&self) -> Option<&str> {
-        return self.state.as_deref();
+        self.state.as_deref()
     }
 }
 

@@ -3,6 +3,8 @@
 //! `github_issue` is a minimal utility to create and update issues within Github.
 use log;
 
+use octocrab;
+
 // allowed operations for github issue interactions
 #[non_exhaustive]
 #[derive(Copy, Clone)]
