@@ -230,6 +230,9 @@ impl<'issue> Issue<'issue> {
         &self,
         issues: octocrab::issues::IssueHandler<'octo>,
     ) -> Result<octocrab::models::issues::Issue, &str> {
+        // declare labels and assignees at higher scope so values are not dropped before borrow is used later in function
+        let labels: Vec<String>;
+
         // build the issue pages
         let mut issue_page = issues.list();
         // ... with optional parameters
@@ -255,10 +258,10 @@ impl<'issue> Issue<'issue> {
             let assignee = &self.assignees.as_ref().unwrap()[0][..];
             issue_page = issue_page.assignee(assignee);
         }
-        /*if self.labels.is_some() {
-            let labels = self.labels.clone().unwrap();
+        if self.labels.is_some() {
+            labels = self.labels.clone().unwrap();
             issue_page = issue_page.labels(&labels[..]);
-        }*/
+        }
 
         log::debug!("listing issues");
         // send and await the issue page
@@ -297,6 +300,9 @@ impl<'issue> Issue<'issue> {
         match self.number {
             // issue number specified
             Some(number) => {
+                // declare labels and assignees at higher scope so values are not dropped before borrow is used later in function
+                let (labels, assignees): (Vec<String>, Vec<String>);
+
                 // build the issue
                 let mut issue = issues.update(number);
                 // ... with optional parameters
@@ -306,14 +312,14 @@ impl<'issue> Issue<'issue> {
                 if self.body.is_some() {
                     issue = issue.body(self.body.as_ref().unwrap());
                 }
-                /*if self.labels.is_some() {
-                    let labels = self.labels.clone().unwrap();
+                if self.labels.is_some() {
+                    labels = self.labels.clone().unwrap();
                     issue = issue.labels(&labels[..]);
                 }
                 if self.assignees.is_some() {
-                    let labels = self.assignees.clone().unwrap();
+                    assignees = self.assignees.clone().unwrap();
                     issue = issue.assignees(&assignees[..]);
-                }*/
+                }
                 if self.state.is_some() {
                     // convert str state to issue_state
                     let issue_state = str_to_issue_state(self.state.unwrap())?;
