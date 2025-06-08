@@ -1,4 +1,4 @@
-### 1.2.1 (Next)
+### 1.2.1
 - Enable Github issue state `check` step trigger customization.
 - Convert Concourse model struct types to Octocrab models.
 - Enable `labels` in issue update and list.

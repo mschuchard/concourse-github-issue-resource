@@ -17,7 +17,9 @@ This repository and project is based on the work performed for [MITODL](https://
 
 - `repo`: _required_ The Github repository with the issue tracker in which to read and/or write issues.
 
-- `skip_check`: _optional_ A boolean that signifies whether to skip the `check` step or not. This is primarily useful for situations where it is known that a specified issue does not exist, and instead must be created during `out`.
+- `skip_check`: _optional_ A boolean that signifies whether to skip the `check` step or not. This is primarily useful for situations where it is known that a specified issue does not exist, and instead must be created during `out`. The default value is `false`.
+
+- `trigger`: _optional_ The issue state that causes a trigger during the `check` step. This can be either `open` or `closed`. The default value is `closed`.
 
 - `number`: _optional/required_ The issue number to read during the `check` step for triggering Concourse pipelines based on the issue state, or for updating during the `out` step. If this is omitted then instead a list operation with filters (i.e. "search") occurs to determine the issue during the `check` step, and a create operation during the `out` step. Therefore this is implicitly required if an issue update is desired as a new issue creation attempt will occur during `out` otherwise.
 
@@ -29,7 +31,7 @@ The following parameters are for filtering from a list of issues to one issue (i
 
 - `assignee`: _optional_ The user name of the assignee for the searched issue.
 
-- `labels`: _optional_ (value currently ignored) The list of labels for the searched issue.
+- `labels`: _optional_ The list of labels for the searched issue.
 
 ### `version`: designates the Github issue state
 
@@ -43,14 +45,14 @@ version:
 
 ### `check`: returns size two list for closed Github issues and size one list for open Github issues
 
-The `check` step determines the state of the specified Github issue. If the state is `closed` then the returned list of versions is size two. If the state is `open` then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`closed` triggers and `open` does not trigger) because it simulates a delta of versions for `closed` and not `open`. The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
+The `check` step determines the state of the specified Github issue. If the state is `closed` (default behavior; otherwise `trigger` source parameter value) then the returned list of versions is size two. If the state is `open` (default behavior; otherwise NOT `trigger` source parameter value) then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`closed` triggers and `open` does not trigger by default; otherwise customized by `trigger` source parameter value) because it simulates a delta of versions for `closed` and not `open` (default). The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
 
-closed:
+trigger:
 ```json
 [{"state":"open"},{"state":"closed"}]
 ```
 
-open:
+no trigger:
 ```json
 [{"state":"open"}]
 ```
@@ -59,11 +61,11 @@ open:
 
 This ignores any inputs and quickly dummies outputs, and therefore is primarily useful for executing an efficient `check` step with minimal overhead.
 
-### `out`: creates a Github issue
+### `out`: creates or updates a Github issue
 
 The `out` step updates or creates a Github issue according to the input parameters below. The number of the created Github issue is written to a file at `/opt/resource/issue_number.txt` so that it can be re-used later in the build (especially for a subsequent `check` step to trigger Concourse steps based on the status of the Github issue created during this step).
 
-Recall that the parameter which determines whether a create or update operation occurs during this step is `source.number`.
+Recall that the parameter which determines whether a create or update operation occurs during this step is `source.number` (update when a specific existing issue number is specified; otherwise create).
 
 The metadata output from this step contains the number, url, title, state, labels, assignees, milestone, created time, and last updated time for the issue.
 
@@ -71,9 +73,9 @@ The metadata output from this step contains the number, url, title, state, label
 
 - `body`: _optional_ The body of the written Github issue.
 
-- `labels`: _optional_ (value currently ignored for update) The list of labels for the written Github issue.
+- `labels`: _optional_ The list of labels for the written Github issue.
 
-- `assignees`: _optional_ (value currently ignored for update) The list of assignees for the written Github issue.
+- `assignees`: _optional_ The list of assignees for the written Github issue.
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
@@ -97,7 +99,7 @@ Below is the general structure of the generated Concourse metadata. Note that th
 }
 ```
 
-Octocrab doc links:  
+Octocrab doc links for model serialization:  
 [Label](https://docs.rs/octocrab/latest/octocrab/models/struct.Label.html)  
 [Assignee](https://docs.rs/octocrab/latest/octocrab/models/struct.Author.html)  
 [Milestone](https://docs.rs/octocrab/latest/octocrab/models/struct.Milestone.html)
