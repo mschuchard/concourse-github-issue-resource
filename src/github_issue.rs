@@ -4,6 +4,8 @@
 use log;
 
 use octocrab;
+use octocrab::models::IssueState;
+use octocrab::params::State;
 
 // allowed operations for github issue interactions
 #[non_exhaustive]
@@ -28,27 +30,27 @@ impl From<Action> for String {
     }
 }
 
-// convert string to IssueState or params::State without trait implementations because not allowed (no impl Into<octocrab::models::IssueState> for &str)
-fn str_to_issue_state(param: &str) -> Result<octocrab::models::IssueState, &str> {
+// convert string to IssueState or params::State without trait implementations because not allowed (no impl Into<IssueState> for &str)
+fn str_to_issue_state(param: &str) -> Result<IssueState, &str> {
     match param {
-        "open" => Ok(octocrab::models::IssueState::Open),
-        "closed" => Ok(octocrab::models::IssueState::Closed),
+        "open" => Ok(IssueState::Open),
+        "closed" => Ok(IssueState::Closed),
         "all" => {
             log::warn!(
                 "all was specified for issue state, and this can only be utilized with issue filtering, and not updating"
             );
             log::warn!("the issue state will be reset to 'open'");
-            Ok(octocrab::models::IssueState::Open)
+            Ok(IssueState::Open)
         }
         &_ => Err("the issue state must be either open or closed"),
     }
 }
 
-fn str_to_params_state(param: &str) -> Result<octocrab::params::State, &str> {
+fn str_to_params_state(param: &str) -> Result<State, &str> {
     match param {
-        "open" => Ok(octocrab::params::State::Open),
-        "closed" => Ok(octocrab::params::State::Closed),
-        "all" => Ok(octocrab::params::State::All),
+        "open" => Ok(State::Open),
+        "closed" => Ok(State::Closed),
+        "all" => Ok(State::All),
         &_ => Err("the issue state must be either open, closed, or all"),
     }
 }
@@ -68,7 +70,7 @@ pub(super) struct Issue<'issue> {
     assignees: Option<Vec<String>>,
     // read and update
     number: Option<u64>,
-    // update octocrab::models::IssueState and list octocrab::params::State
+    // update IssueState and list State
     state: Option<&'issue str>,
     // create, list, and update
     milestone: Option<u64>,

@@ -5,20 +5,21 @@ use serde::{Deserialize, Serialize};
 
 use concourse_resource::IntoMetadataKV;
 use octocrab;
+use octocrab::models::IssueState;
 
 // standard concourse structs
 // check input and (vec seralized to list) output, out output
 #[derive(Eq, PartialEq, Serialize, Deserialize, Debug)]
 pub(super) struct Version {
-    state: octocrab::models::IssueState,
+    state: IssueState,
 }
 
 impl Version {
     /// Constructor
     /// ```
-    /// let version = Version::new(octocrab::models::IssueState::Closed);
+    /// let version = Version::new(IssueState::Closed);
     /// ```
-    pub(super) fn new(state: octocrab::models::IssueState) -> Self {
+    pub(super) fn new(state: IssueState) -> Self {
         Version { state }
     }
 }
@@ -40,7 +41,7 @@ pub(super) struct Source {
     // for skipping check during e.g. put+create
     skip_check: Option<bool>,
     // trigger on issue state open or closed
-    trigger: Option<octocrab::models::IssueState>,
+    trigger: Option<IssueState>,
 }
 
 impl Source {
@@ -78,10 +79,8 @@ impl Source {
         self.skip_check.unwrap_or(false)
     }
     // return unwrapped value with default closed for ease of use
-    pub(super) fn trigger(&self) -> octocrab::models::IssueState {
-        self.trigger
-            .clone()
-            .unwrap_or(octocrab::models::IssueState::Closed)
+    pub(super) fn trigger(&self) -> IssueState {
+        self.trigger.clone().unwrap_or(IssueState::Closed)
     }
 }
 
@@ -126,7 +125,7 @@ pub(super) struct OutMetadata {
     number: u64,
     url: String,
     title: String,
-    state: octocrab::models::IssueState,
+    state: IssueState,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     labels: Vec<octocrab::models::Label>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -144,7 +143,7 @@ impl OutMetadata {
     ///     5,
     ///     String::from("http://does.not.exist"),
     ///     String::from("some issue"),
-    ///     octocrab::models::IssueState::Open,
+    ///     IssueState::Open,
     ///     vec![],
     ///     vec![],
     ///     None,
@@ -157,7 +156,7 @@ impl OutMetadata {
         number: u64,
         url: impl Into<String>,
         title: String,
-        state: octocrab::models::IssueState,
+        state: IssueState,
         labels: Vec<octocrab::models::Label>,
         assignees: Vec<octocrab::models::Author>,
         milestone: Option<octocrab::models::Milestone>,

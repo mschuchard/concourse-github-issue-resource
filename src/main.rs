@@ -2,7 +2,7 @@ use env_logger;
 use log;
 
 use concourse_resource::*;
-use octocrab;
+use octocrab::models::IssueState;
 
 mod concourse;
 mod github_issue;
@@ -37,8 +37,8 @@ impl concourse_resource::Resource for GithubIssue {
                 "the check step will be skipped because 'skip_check' was set to true in source"
             );
             return vec![
-                concourse::Version::new(octocrab::models::IssueState::Open),
-                concourse::Version::new(octocrab::models::IssueState::Closed),
+                concourse::Version::new(IssueState::Open),
+                concourse::Version::new(IssueState::Closed),
             ];
         }
 
@@ -76,11 +76,11 @@ impl concourse_resource::Resource for GithubIssue {
         // return two sized version vector if issue state matches trigger, and one sized if otherwise
         if issue.state == source.trigger() {
             vec![
-                concourse::Version::new(octocrab::models::IssueState::Open),
-                concourse::Version::new(octocrab::models::IssueState::Closed),
+                concourse::Version::new(IssueState::Open),
+                concourse::Version::new(IssueState::Closed),
             ]
         } else {
-            vec![concourse::Version::new(octocrab::models::IssueState::Open)]
+            vec![concourse::Version::new(IssueState::Open)]
         }
     }
 
@@ -105,7 +105,7 @@ impl concourse_resource::Resource for GithubIssue {
             "there is no actual functionality for the in step, and the version and metadata are dummied"
         );
         Ok(concourse_resource::InOutput {
-            version: concourse::Version::new(octocrab::models::IssueState::Open),
+            version: concourse::Version::new(IssueState::Open),
             metadata: None,
         })
     }
@@ -177,7 +177,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return out step output
         concourse_resource::OutOutput {
-            version: concourse::Version::new(octocrab::models::IssueState::Open),
+            version: concourse::Version::new(IssueState::Open),
             metadata: Some(concourse::OutMetadata::new(
                 issue.number,
                 issue.url,
