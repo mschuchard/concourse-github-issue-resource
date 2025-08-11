@@ -162,9 +162,17 @@ impl concourse_resource::Resource for GithubIssue {
         if source.number().is_none() {
             // store created issue number in file for subsequent check step
             let file_path = format!("{input_path}/issue_number.txt");
-            std::fs::write(file_path, issue.number.to_string())
-                .expect("issue number could not be written to {file_path}");
-            log::info!("the issue number was stored in a file at '{input_path}/issue_number.txt'");
+            match std::fs::write(&file_path, issue.number.to_string()) {
+                Ok(_) => log::info!(
+                    "the issue number was stored in a file at '{input_path}/issue_number.txt'"
+                ),
+                Err(error) => {
+                    log::warn!(
+                        "issue number could not be written to {file_path}, and issue number will therefore not be available for subsequent check step"
+                    );
+                    log::warn!("error: {error}");
+                }
+            }
         }
 
         // return out step output
