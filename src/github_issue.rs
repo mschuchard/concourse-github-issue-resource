@@ -158,17 +158,17 @@ impl<'issue> Issue<'issue> {
                 // createissuebuilder milestone type is impl Into<Option<u64>> so we can build it immediately
                 let mut issue = issues.create(title).milestone(self.milestone);
                 // ... with optional parameters
-                if self.body.is_some() {
-                    issue = issue.body(self.body.unwrap());
+                if let Some(body) = self.body {
+                    issue = issue.body(body);
                 }
-                if self.labels.is_some() {
-                    issue = issue.labels(self.labels.clone());
+                if let Some(labels) = &self.labels {
+                    issue = issue.labels(labels.clone());
                 }
-                if self.assignees.is_some() {
-                    issue = issue.assignees(self.assignees.clone());
+                if let Some(assignees) = &self.assignees {
+                    issue = issue.assignees(assignees.clone());
                 }
-                if self.milestone.is_some() {
-                    issue = issue.milestone(self.milestone);
+                if let Some(milestone) = self.milestone {
+                    issue = issue.milestone(milestone);
                 }
 
                 log::debug!("creating issue");
@@ -230,23 +230,20 @@ impl<'issue> Issue<'issue> {
         &self,
         issues: octocrab::issues::IssueHandler<'octo>,
     ) -> Result<octocrab::models::issues::Issue, &str> {
-        // declare labels and assignees at higher scope so values are not dropped before borrow is used later in function
-        let labels: Vec<String>;
-
         // build the issue pages
         let mut issue_page = issues.list();
         // ... with optional parameters
-        if self.state.is_some() {
+        if let Some(state) = self.state {
             // convert str state to params state
-            let params_state = str_to_params_state(self.state.unwrap())?;
+            let params_state = str_to_params_state(state)?;
             issue_page = issue_page.state(params_state);
         }
-        if self.milestone.is_some() {
-            issue_page = issue_page.milestone(self.milestone.unwrap());
+        if let Some(milestone) = self.milestone {
+            issue_page = issue_page.milestone(milestone);
         }
-        if self.assignees.is_some() {
+        if let Some(assignees) = &self.assignees {
             // assert only one assignee in assignees
-            let num_assignees = self.assignees.as_ref().unwrap().len();
+            let num_assignees = assignees.len();
             if num_assignees != 1 {
                 log::error!("list action attempted with other than one assignee: {num_assignees}");
                 log::error!(
@@ -255,12 +252,11 @@ impl<'issue> Issue<'issue> {
                 return Err("multiple assignees and list action");
             }
             // assign value of only assignee and use for assignee filter
-            let assignee = &self.assignees.as_ref().unwrap()[0][..];
+            let assignee = &assignees[0][..];
             issue_page = issue_page.assignee(assignee);
         }
-        if self.labels.is_some() {
-            labels = self.labels.clone().unwrap();
-            issue_page = issue_page.labels(&labels[..]);
+        if let Some(labels) = &self.labels {
+            issue_page = issue_page.labels(labels);
         }
 
         log::debug!("listing issues");
@@ -300,33 +296,28 @@ impl<'issue> Issue<'issue> {
         match self.number {
             // issue number specified
             Some(number) => {
-                // declare labels and assignees at higher scope so values are not dropped before borrow is used later in function
-                let (labels, assignees): (Vec<String>, Vec<String>);
-
                 // build the issue
                 let mut issue = issues.update(number);
                 // ... with optional parameters
-                if self.title.is_some() {
-                    issue = issue.title(self.title.as_ref().unwrap());
+                if let Some(title) = self.title {
+                    issue = issue.title(title);
                 }
-                if self.body.is_some() {
-                    issue = issue.body(self.body.as_ref().unwrap());
+                if let Some(body) = self.body {
+                    issue = issue.body(body);
                 }
-                if self.labels.is_some() {
-                    labels = self.labels.clone().unwrap();
-                    issue = issue.labels(&labels[..]);
+                if let Some(labels) = &self.labels {
+                    issue = issue.labels(labels);
                 }
-                if self.assignees.is_some() {
-                    assignees = self.assignees.clone().unwrap();
-                    issue = issue.assignees(&assignees[..]);
+                if let Some(assignees) = &self.assignees {
+                    issue = issue.assignees(assignees);
                 }
-                if self.state.is_some() {
+                if let Some(state) = self.state {
                     // convert str state to issue_state
-                    let issue_state = str_to_issue_state(self.state.unwrap())?;
+                    let issue_state = str_to_issue_state(state)?;
                     issue = issue.state(issue_state);
                 }
-                if self.milestone.is_some() {
-                    issue = issue.milestone(self.milestone.unwrap());
+                if let Some(milestone) = self.milestone {
+                    issue = issue.milestone(milestone);
                 }
 
                 log::debug!("updating issue");

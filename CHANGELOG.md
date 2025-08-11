@@ -1,3 +1,7 @@
+### 1.2.2
+- Warn instead of error when issue number file write fails.
+- Optimize issue operation customization.
+
 ### 1.2.1
 - Enable Github issue state `check` step trigger customization.
 - Convert Concourse model struct types to Octocrab models.
