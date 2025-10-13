@@ -31,6 +31,12 @@ impl concourse_resource::Resource for GithubIssue {
         // validate and unwrap source
         let source = source.expect("source is required for the Github Issue resource");
 
+        if source.owner().is_empty() || source.repo().is_empty() {
+            panic!(
+                "both 'owner' and 'repo' are required parameters for the Github Issue Resource 'source'"
+            );
+        }
+
         // return immediately with two sized vector if check step skip requested (e.g. source for out/put+create)
         if source.skip_check() {
             log::info!(
