@@ -9,7 +9,7 @@ use octocrab::params::State;
 
 // allowed operations for github issue interactions
 #[non_exhaustive]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub(super) enum Action {
     Create,
     List,
@@ -18,15 +18,8 @@ pub(super) enum Action {
 }
 
 impl From<Action> for String {
-    #[allow(unreachable_patterns)]
     fn from(action: Action) -> Self {
-        match action {
-            Action::Create => String::from("Create"),
-            Action::List => String::from("List"),
-            Action::Read => String::from("Read"),
-            Action::Update => String::from("Update"),
-            _ => String::from("Unknown"),
-        }
+        format!("{action:?}")
     }
 }
 
@@ -121,7 +114,7 @@ impl<'issue> Issue<'issue> {
             Some(pat) => octocrab::Octocrab::builder()
                 .personal_token(pat.to_string())
                 .build()
-                .unwrap_or({
+                .unwrap_or_else(|_| {
                     log::warn!("could not authenticate client with Personal Access Token");
                     log::warn!("will continue with unauthenticated client");
                     octocrab::Octocrab::default()

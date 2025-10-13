@@ -33,7 +33,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         if source.owner().is_empty() || source.repo().is_empty() {
             panic!(
-                "both 'owner' and 'repo' are required parameters for the Github Issue Resource 'source'"
+                "both 'owner' and 'repo' are required parameters for the Github Issue resource 'source'"
             );
         }
 
