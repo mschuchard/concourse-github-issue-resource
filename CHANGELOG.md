@@ -1,9 +1,7 @@
-### 1.2.3 (Next)
-- Improve `source` validation.
-
 ### 1.2.2
 - Warn instead of error when issue number file write fails.
 - Optimize issue operation customization.
+- Improve `source` validation.
 
 ### 1.2.1
 - Enable Github issue state `check` step trigger customization.
