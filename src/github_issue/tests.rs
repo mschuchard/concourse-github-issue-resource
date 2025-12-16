@@ -50,6 +50,7 @@ fn test_issue_new() {
             None,
             Some(100),
             None,
+            None,
             None
         ),
         Issue {
@@ -61,6 +62,7 @@ fn test_issue_new() {
             labels: None,
             assignees: None,
             number: Some(100),
+            lock: None,
             state: None,
             //params_state: None,
             milestone: None
@@ -80,6 +82,7 @@ fn test_issue_new() {
             Some(vec![String::from("assignee")]),
             None,
             None,
+            None,
             None
         ),
         Issue {
@@ -91,6 +94,7 @@ fn test_issue_new() {
             labels: Some(vec![String::from("label")]),
             assignees: Some(vec![String::from("assignee")]),
             number: None,
+            lock: None,
             state: None,
             //params_state: None,
             milestone: None
@@ -112,6 +116,7 @@ fn test_issue_main_read() {
             None,
             None,
             Some(100),
+            None,
             None,
             None,
         );
@@ -138,6 +143,7 @@ fn test_issue_main_list() {
             None,
             None,
             Some(vec![String::from("pdpinch")]),
+            None,
             None,
             Some("closed"),
             Some(3),
@@ -168,6 +174,7 @@ fn test_errors() {
             None,
             None,
             None,
+            None,
         );
         let gh_issue_four = Issue::new(
             None,
@@ -177,6 +184,7 @@ fn test_errors() {
             None,
             None,
             Some(vec![String::from("blarghmatey")]),
+            None,
             None,
             None,
             None,

@@ -83,6 +83,7 @@ fn test_outparams_title() {
             labels: None,
             assignees: None,
             milestone: None,
+            lock: None,
             state: None,
         }
         .title,
@@ -113,6 +114,7 @@ fn test_outparams_deserialize() {
                 String::from("my_user_two")
             ]),
             milestone: Some(2),
+            lock: None,
             state: Some(String::from("closed")),
         },
         "out params did not contain the expected member values",
