@@ -63,6 +63,8 @@ pub(super) struct Issue<'issue> {
     assignees: Option<Vec<String>>,
     // read and update
     number: Option<u64>,
+    // update
+    lock: Option<bool>,
     // update IssueState and list State
     state: Option<&'issue str>,
     // create, list, and update
@@ -83,6 +85,7 @@ impl<'issue> Issue<'issue> {
         labels: Option<Vec<String>>,
         assignees: Option<Vec<String>>,
         number: Option<u64>,
+        lock: Option<bool>,
         state: Option<&'issue str>,
         milestone: Option<u64>,
     ) -> Self {
@@ -96,6 +99,7 @@ impl<'issue> Issue<'issue> {
             labels,
             assignees,
             number,
+            lock,
             state,
             milestone,
         }

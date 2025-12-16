@@ -58,6 +58,7 @@ impl concourse_resource::Resource for GithubIssue {
             source.labels(),
             source.assignee(),
             source.number(),
+            None,
             source.state(),
             source.milestone(),
         );
@@ -140,6 +141,7 @@ impl concourse_resource::Resource for GithubIssue {
             params.labels(),
             params.assignees(),
             source.number(),
+            params.lock(),
             params.state(),
             params.milestone(),
         );
