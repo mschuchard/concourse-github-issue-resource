@@ -5,6 +5,7 @@ use log;
 
 use octocrab;
 use octocrab::models::IssueState;
+use octocrab::params::LockReason;
 use octocrab::params::State;
 
 // allowed operations for github issue interactions
@@ -295,6 +296,28 @@ impl<'issue> Issue<'issue> {
         match self.number {
             // issue number specified
             Some(number) => {
+                // first lock or unlock the issue if specified
+                if let Some(lock) = self.lock {
+                    if lock {
+                        match issues.lock(number, LockReason::Resolved).await {
+                            Ok(_) => log::debug!("issue number {number} locked"),
+                            Err(error) => {
+                                log::error!("the issue number {number} could not be locked");
+                                log::error!("{error}");
+                                return Err("issue not locked");
+                            }
+                        }
+                    } else {
+                        match issues.unlock(number).await {
+                            Ok(_) => log::debug!("issue number {number} unlocked"),
+                            Err(error) => {
+                                log::error!("the issue number {number} could not be unlocked");
+                                log::error!("{error}");
+                                return Err("issue not unlocked");
+                            }
+                        }
+                    }
+                }
                 // build the issue
                 let mut issue = issues.update(number);
                 // ... with optional parameters
