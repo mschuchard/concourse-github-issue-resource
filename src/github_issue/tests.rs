@@ -105,6 +105,74 @@ fn test_issue_new() {
         },
         "failed to construct Issue for create"
     );
+
+    // validate basic update constructor
+    assert_eq!(
+        Issue::new(
+            None,
+            "my_org",
+            "my_repo",
+            None,
+            Some("updated body"),
+            Some(vec![String::from("label1"), String::from("label2")]),
+            Some(vec![String::from("assignee1")]),
+            None,
+            Some(42),
+            Some(true),
+            Some("closed"),
+            Some(12)
+        ),
+        Issue {
+            pat: None,
+            owner: "my_org",
+            repo: "my_repo",
+            title: None,
+            body: Some("updated body"),
+            labels: Some(vec![String::from("label1"), String::from("label2")]),
+            assignees: Some(vec![String::from("assignee1")]),
+            creator: None,
+            number: Some(42),
+            lock: Some(true),
+            state: Some("closed"),
+            //params_state: None,
+            milestone: Some(12),
+        },
+        "failed to construct Issue for update"
+    );
+
+    // validate basic list constructor
+    assert_eq!(
+        Issue::new(
+            None,
+            "my_org",
+            "my_repo",
+            None,
+            None,
+            None,
+            Some(vec![String::from("assignee1")]),
+            Some("creator1"),
+            None,
+            None,
+            Some("open"),
+            Some(5)
+        ),
+        Issue {
+            pat: None,
+            owner: "my_org",
+            repo: "my_repo",
+            title: None,
+            body: None,
+            labels: None,
+            assignees: Some(vec![String::from("assignee1")]),
+            creator: Some("creator1"),
+            number: None,
+            lock: None,
+            state: Some("open"),
+            //params_state: None,
+            milestone: Some(5),
+        },
+        "failed to construct Issue for list"
+    );
 }
 
 #[test]

@@ -61,6 +61,7 @@ pub(super) struct Issue<'issue> {
     title: Option<&'issue str>,
     body: Option<&'issue str>,
     labels: Option<Vec<String>>,
+    // also list in addition to above comment considerations
     assignees: Option<Vec<String>>,
     // list
     creator: Option<&'issue str>,
