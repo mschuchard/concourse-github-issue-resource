@@ -44,6 +44,7 @@ fn test_resource_check_list() {
     "repo": "ol-infrastructure",
     "trigger": "open",
     "assignee": "pdpinch",
+    "creator": "blarghmatey",
     "milestone": 3,
     "state": "closed"
 }"#;
