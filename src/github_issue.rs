@@ -62,6 +62,8 @@ pub(super) struct Issue<'issue> {
     body: Option<&'issue str>,
     labels: Option<Vec<String>>,
     assignees: Option<Vec<String>>,
+    // list
+    creator: Option<&'issue str>,
     // read and update
     number: Option<u64>,
     // update
@@ -85,6 +87,7 @@ impl<'issue> Issue<'issue> {
         body: Option<&'issue str>,
         labels: Option<Vec<String>>,
         assignees: Option<Vec<String>>,
+        creator: Option<&'issue str>,
         number: Option<u64>,
         lock: Option<bool>,
         state: Option<&'issue str>,
@@ -99,6 +102,7 @@ impl<'issue> Issue<'issue> {
             body,
             labels,
             assignees,
+            creator,
             number,
             lock,
             state,
@@ -117,7 +121,7 @@ impl<'issue> Issue<'issue> {
         // instantiate client and issues
         let client = match &self.pat {
             Some(pat) => octocrab::Octocrab::builder()
-                .personal_token(pat.to_string())
+                .personal_token(*pat)
                 .build()
                 .unwrap_or_else(|_| {
                     log::warn!("could not authenticate client with Personal Access Token");
@@ -233,6 +237,9 @@ impl<'issue> Issue<'issue> {
         // build the issue pages
         let mut issue_page = issues.list();
         // ... with optional parameters
+        if let Some(creator) = &self.creator {
+            issue_page = issue_page.creator(*creator);
+        }
         if let Some(state) = self.state {
             // convert str state to params state
             let params_state = str_to_params_state(state)?;
