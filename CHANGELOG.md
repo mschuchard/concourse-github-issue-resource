@@ -1,5 +1,6 @@
 ### 1.3.0
 - Add issue lock/unlock functionality.
+- Add `creator` parameter to issue search filter.
 
 ### 1.2.2
 - Warn instead of error when issue number file write fails.

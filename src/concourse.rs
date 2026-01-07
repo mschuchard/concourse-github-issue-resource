@@ -37,6 +37,7 @@ pub(super) struct Source {
     state: Option<String>,
     milestone: Option<u64>,
     assignee: Option<String>,
+    creator: Option<String>,
     labels: Option<Vec<String>>,
     // for skipping check during e.g. put+create
     skip_check: Option<bool>,
@@ -70,6 +71,9 @@ impl Source {
             Some(assignee) => Some(vec![assignee]),
             None => None,
         }
+    }
+    pub(super) fn creator(&self) -> Option<&str> {
+        self.creator.as_deref()
     }
     pub(super) fn labels(&self) -> Option<Vec<String>> {
         self.labels.clone()

@@ -34,6 +34,7 @@ fn test_source_owner() {
             number: None,
             milestone: None,
             assignee: None,
+            creator: None,
             labels: None,
             skip_check: None,
             trigger: None,
@@ -51,6 +52,9 @@ fn test_source_deserialize() {
     "repo": "ol-infrastructure",
     "number": 1,
     "state": "open",
+    "milestone": 5,
+    "assignee": "the foo",
+    "creator": "the bar",
     "skip_check": false,
     "trigger": "open"
 }"#;
@@ -64,8 +68,9 @@ fn test_source_deserialize() {
             repo: String::from("ol-infrastructure"),
             number: Some(1),
             state: Some(String::from("open")),
-            milestone: None,
-            assignee: None,
+            milestone: Some(5),
+            assignee: Some(String::from("the foo")),
+            creator: Some(String::from("the bar")),
             labels: None,
             skip_check: Some(false),
             trigger: Some(octocrab::models::IssueState::Open)
