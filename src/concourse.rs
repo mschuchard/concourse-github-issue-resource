@@ -98,6 +98,7 @@ pub(super) struct OutParams {
     assignees: Option<Vec<String>>,
     milestone: Option<u64>,
     // update only
+    comment: Option<String>,
     lock: Option<bool>,
     state: Option<String>,
 }
@@ -118,6 +119,9 @@ impl OutParams {
     }
     pub(super) fn milestone(&self) -> Option<u64> {
         self.milestone
+    }
+    pub(super) fn comment(&self) -> Option<&str> {
+        self.comment.as_deref()
     }
     pub(super) fn lock(&self) -> Option<bool> {
         self.lock

@@ -88,6 +88,7 @@ fn test_outparams_title() {
             labels: None,
             assignees: None,
             milestone: None,
+            comment: None,
             lock: None,
             state: None,
         }
@@ -104,6 +105,8 @@ fn test_outparams_deserialize() {
     "body": "approve the concourse step",
     "assignees": ["my_user_one", "my_user_two"],
     "milestone": 2,
+    "comment": "good comment",
+    "lock": false,
     "state": "closed"
 }"#;
     let out_params =
@@ -119,7 +122,8 @@ fn test_outparams_deserialize() {
                 String::from("my_user_two")
             ]),
             milestone: Some(2),
-            lock: None,
+            comment: Some(String::from("good comment")),
+            lock: Some(false),
             state: Some(String::from("closed")),
         },
         "out params did not contain the expected member values",
