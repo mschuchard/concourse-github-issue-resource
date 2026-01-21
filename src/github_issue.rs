@@ -68,6 +68,7 @@ pub(super) struct Issue<'issue> {
     // read and update
     number: Option<u64>,
     // update
+    comment: Option<&'issue str>,
     lock: Option<bool>,
     // update IssueState and list State
     state: Option<&'issue str>,
@@ -78,7 +79,7 @@ pub(super) struct Issue<'issue> {
 impl<'issue> Issue<'issue> {
     /// Constructor for the Config struct. Contains all of the members necessary for instantiating a client and performing an action.
     /// ```
-    /// let gh_issue = Issue::new(None, String::from("my_org"), String::from("my_repo"), None, None, None, None, Some(100), None);
+    /// let gh_issue = Issue::new(None, String::from("my_org"), String::from("my_repo"), None, None, None, None, None, Some(100), None, None, None, None);
     /// ```
     pub(super) fn new(
         pat: Option<&'issue str>,
@@ -90,6 +91,7 @@ impl<'issue> Issue<'issue> {
         assignees: Option<Vec<String>>,
         creator: Option<&'issue str>,
         number: Option<u64>,
+        comment: Option<&'issue str>,
         lock: Option<bool>,
         state: Option<&'issue str>,
         milestone: Option<u64>,
@@ -105,6 +107,7 @@ impl<'issue> Issue<'issue> {
             assignees,
             creator,
             number,
+            comment,
             lock,
             state,
             milestone,
@@ -308,7 +311,7 @@ impl<'issue> Issue<'issue> {
                 if let Some(lock) = self.lock {
                     if lock {
                         match issues.lock(number, LockReason::Resolved).await {
-                            Ok(_) => log::debug!("issue number {number} locked"),
+                            Ok(_) => log::info!("issue number {number} locked"),
                             Err(error) => {
                                 log::error!("the issue number {number} could not be locked");
                                 log::error!("{error}");
@@ -317,12 +320,23 @@ impl<'issue> Issue<'issue> {
                         }
                     } else {
                         match issues.unlock(number).await {
-                            Ok(_) => log::debug!("issue number {number} unlocked"),
+                            Ok(_) => log::info!("issue number {number} unlocked"),
                             Err(error) => {
                                 log::error!("the issue number {number} could not be unlocked");
                                 log::error!("{error}");
                                 return Err("issue not unlocked");
                             }
+                        }
+                    }
+                }
+                // then create a comment if specified
+                if let Some(comment) = self.comment {
+                    match issues.create_comment(number, comment).await {
+                        Ok(_) => log::info!("comment added to issue number {number}"),
+                        Err(error) => {
+                            log::error!("a comment could not be added to issue number {number}");
+                            log::error!("{error}");
+                            return Err("comment not added");
                         }
                     }
                 }

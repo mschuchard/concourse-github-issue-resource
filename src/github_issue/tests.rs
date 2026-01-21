@@ -52,6 +52,7 @@ fn test_issue_new() {
             Some(100),
             None,
             None,
+            None,
             None
         ),
         Issue {
@@ -64,6 +65,7 @@ fn test_issue_new() {
             assignees: None,
             creator: None,
             number: Some(100),
+            comment: None,
             lock: None,
             state: None,
             //params_state: None,
@@ -86,6 +88,7 @@ fn test_issue_new() {
             None,
             None,
             None,
+            None,
             None
         ),
         Issue {
@@ -98,6 +101,7 @@ fn test_issue_new() {
             assignees: Some(vec![String::from("assignee")]),
             creator: None,
             number: None,
+            comment: None,
             lock: None,
             state: None,
             //params_state: None,
@@ -118,6 +122,7 @@ fn test_issue_new() {
             Some(vec![String::from("assignee1")]),
             None,
             Some(42),
+            Some("good comment"),
             Some(true),
             Some("closed"),
             Some(12)
@@ -132,6 +137,7 @@ fn test_issue_new() {
             assignees: Some(vec![String::from("assignee1")]),
             creator: None,
             number: Some(42),
+            comment: Some("good comment"),
             lock: Some(true),
             state: Some("closed"),
             //params_state: None,
@@ -153,6 +159,7 @@ fn test_issue_new() {
             Some("creator1"),
             None,
             None,
+            None,
             Some("open"),
             Some(5)
         ),
@@ -166,6 +173,7 @@ fn test_issue_new() {
             assignees: Some(vec![String::from("assignee1")]),
             creator: Some("creator1"),
             number: None,
+            comment: None,
             lock: None,
             state: Some("open"),
             //params_state: None,
@@ -189,6 +197,7 @@ fn test_issue_main_read() {
             None,
             None,
             Some(100),
+            None,
             None,
             None,
             None,
@@ -216,6 +225,7 @@ fn test_issue_main_list() {
             None,
             None,
             Some(vec![String::from("pdpinch")]),
+            None,
             None,
             None,
             None,
@@ -250,6 +260,7 @@ fn test_errors() {
             None,
             None,
             None,
+            None,
         );
         let gh_issue_four = Issue::new(
             None,
@@ -259,6 +270,7 @@ fn test_errors() {
             None,
             None,
             Some(vec![String::from("blarghmatey")]),
+            None,
             None,
             None,
             None,
