@@ -1,4 +1,4 @@
-### 1.3.0 (Next)
+### 1.3.0
 - Add issue lock/unlock functionality.
 - Add issue update with comment creation functionality.
 - Add `creator` parameter to issue search filter.

@@ -31,6 +31,8 @@ The following parameters are for filtering from a list of issues to one issue (i
 
 - `assignee`: _optional_ The user name of the assignee for the searched issue.
 
+- `creator`: _optional_ The user name of the creator/author for the searched issue.
+
 - `labels`: _optional_ The list of labels for the searched issue.
 
 ### `version`: designates the Github issue state
@@ -79,6 +81,10 @@ The metadata output from this step contains the number, url, title, state, label
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
+- `comment`: _optional_ The body of a comment to add to the issue. This occurs after the locking or unlocking, but before all other issue updates.
+
+- `lock`: _optional_ Whether the issue should be locked or unlocked. This occurs before all other issue updates.
+
 - `state`: _optional_ The desired state of the updated issue. This can be either `open` or `closed`.
 
 ### Metadata
@@ -99,9 +105,9 @@ Below is the general structure of the generated Concourse metadata. Note that th
 }
 ```
 
-Octocrab doc links for model serialization:  
-[Label](https://docs.rs/octocrab/latest/octocrab/models/struct.Label.html)  
-[Assignee](https://docs.rs/octocrab/latest/octocrab/models/struct.Author.html)  
+Octocrab doc links for model serialization:
+[Label](https://docs.rs/octocrab/latest/octocrab/models/struct.Label.html)
+[Assignee](https://docs.rs/octocrab/latest/octocrab/models/struct.Author.html)
 [Milestone](https://docs.rs/octocrab/latest/octocrab/models/struct.Milestone.html)
 
 ## Example

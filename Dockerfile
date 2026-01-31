@@ -1,9 +1,9 @@
-FROM rust:slim-bookworm AS build
+FROM rust:slim-trixie AS build
 WORKDIR /build
 COPY . .
 RUN cargo build --release
 
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 WORKDIR /opt/resource
 COPY --from=build /build/target/release/concourse-github-issue main
 RUN ln -s main check && ln -s main in && ln -s main out
