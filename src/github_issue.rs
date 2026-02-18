@@ -164,7 +164,7 @@ impl<'issue> Issue<'issue> {
             Some(title) => {
                 // build the issue
                 // createissuebuilder milestone type is impl Into<Option<u64>> so we can build it immediately
-                let mut issue = issues.create(title).milestone(self.milestone);
+                let mut issue = issues.create(title);
                 // ... with optional parameters
                 if let Some(body) = self.body {
                     issue = issue.body(body);

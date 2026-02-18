@@ -1,3 +1,6 @@
+### 1.3.1 (Next)
+- Fix unconditional `milestone` assignment during issue creation.
+
 ### 1.3.0
 - Add issue lock/unlock functionality.
 - Add issue update with comment creation functionality.
