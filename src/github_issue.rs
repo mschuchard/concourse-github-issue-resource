@@ -9,7 +9,6 @@ use octocrab::params::LockReason;
 use octocrab::params::State;
 
 // allowed operations for github issue interactions
-#[non_exhaustive]
 #[derive(Copy, Clone, Debug)]
 pub(super) enum Action {
     Create,
@@ -183,7 +182,7 @@ impl<'issue> Issue<'issue> {
                 // send and await the issue
                 match issue.send().await {
                     // return created issue
-                    Ok(issue) => return Ok(issue),
+                    Ok(issue) => Ok(issue),
                     // issue could not be created
                     Err(error) => {
                         log::error!("the issue could not be created");
@@ -212,7 +211,7 @@ impl<'issue> Issue<'issue> {
                 log::debug!("reading issue");
                 // retrieve the issue with the handler
                 match issues.get(number).await {
-                    Ok(issue) => return Ok(issue),
+                    Ok(issue) => Ok(issue),
                     // issue number probably does not exist, or some other error
                     Err(error) => {
                         log::error!(
@@ -221,7 +220,7 @@ impl<'issue> Issue<'issue> {
                         log::error!("{error}");
                         return Err("unknown issue");
                     }
-                };
+                }
             }
             // issue number unspecified
             None => {
@@ -288,7 +287,7 @@ impl<'issue> Issue<'issue> {
         let vec_issues = page.items;
         // ensure only one issue exists in octocrab::Page<octocrab::models::issues::Issue>
         match vec_issues.len() {
-            1 => return Ok(vec_issues[0].clone()),
+            1 => Ok(vec_issues[0].clone()),
             _ => {
                 let num = vec_issues.len();
                 log::error!("expected only one issue to be returned from filtered list");
@@ -311,7 +310,7 @@ impl<'issue> Issue<'issue> {
                 if let Some(lock) = self.lock {
                     if lock {
                         match issues.lock(number, LockReason::Resolved).await {
-                            Ok(_) => log::info!("issue number {number} locked"),
+                            Ok(_) => log::info!("issue number {number} locked as Resolved"),
                             Err(error) => {
                                 log::error!("the issue number {number} could not be locked");
                                 log::error!("{error}");
@@ -368,7 +367,7 @@ impl<'issue> Issue<'issue> {
                 // send and await the issue
                 match issue.send().await {
                     // return updated issue
-                    Ok(issue) => return Ok(issue),
+                    Ok(issue) => Ok(issue),
                     // issue number probably does not exist, or some other error
                     Err(error) => {
                         log::error!("the issue number {number} could not be updated");

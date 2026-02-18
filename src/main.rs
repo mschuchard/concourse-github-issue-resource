@@ -26,7 +26,7 @@ impl concourse_resource::Resource for GithubIssue {
         _version: Option<Self::Version>,
     ) -> Vec<Self::Version> {
         // init logger
-        _ = env_logger::try_init();
+        let _ = env_logger::try_init();
 
         // validate and unwrap source
         let source = source.expect("source is required for the Github Issue resource");
@@ -105,7 +105,7 @@ impl concourse_resource::Resource for GithubIssue {
         Box<dyn std::error::Error>,
     > {
         // init logger
-        _ = env_logger::try_init();
+        let _ = env_logger::try_init();
 
         log::info!(
             "reminder: the in step is only to be used for an efficient check step with minimal overhead"
@@ -127,7 +127,7 @@ impl concourse_resource::Resource for GithubIssue {
         input_path: &str,
     ) -> concourse_resource::OutOutput<Self::Version, Self::OutMetadata> {
         // init logger
-        _ = env_logger::try_init();
+        let _ = env_logger::try_init();
 
         // validate source and params
         let source = source.expect("source is required for the Github Issue resource");
