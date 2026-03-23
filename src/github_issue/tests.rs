@@ -183,136 +183,124 @@ fn test_issue_new() {
     );
 }
 
-#[test]
-fn test_issue_main_read() {
+#[tokio::test]
+async fn test_issue_main_read() {
     // validate issue returned when read from main
-    let test = async {
-        let gh_issue = Issue::new(
-            None,
-            "mitodl",
-            "ol-infrastructure",
-            None,
-            None,
-            None,
-            None,
-            None,
-            Some(100),
-            None,
-            None,
-            None,
-            None,
-        );
-        let issue = gh_issue.main(Action::Read).await;
-        assert_eq!(
-            issue.unwrap().state,
-            octocrab::models::IssueState::Closed,
-            "hundredth issue from mitodl/ol-infrastructure not read and returned correctly",
-        );
-    };
-    let rt = tokio::runtime::Runtime::new().unwrap();
-    rt.block_on(test);
+    let gh_issue = Issue::new(
+        None,
+        "mitodl",
+        "ol-infrastructure",
+        None,
+        None,
+        None,
+        None,
+        None,
+        Some(100),
+        None,
+        None,
+        None,
+        None,
+    );
+    let issue = gh_issue.main(Action::Read).await;
+    assert_eq!(
+        issue.unwrap().state,
+        octocrab::models::IssueState::Closed,
+        "hundredth issue from mitodl/ol-infrastructure not read and returned correctly",
+    );
 }
 
-#[test]
-fn test_issue_main_list() {
+#[tokio::test]
+async fn test_issue_main_list() {
     // validate one issue of multiple listed returned from main
-    let test = async {
-        let gh_issue = Issue::new(
-            None,
-            "mitodl",
-            "ol-infrastructure",
-            None,
-            None,
-            None,
-            Some(vec![String::from("pdpinch")]),
-            None,
-            None,
-            None,
-            None,
-            Some("closed"),
-            Some(3),
-        );
-        let issue = gh_issue.main(Action::List).await;
-        assert_eq!(
-            issue.unwrap().number,
-            833,
-            "single issue #833 from multiple listed from mitodl/ol-infrastructure not returned correctly",
-        );
-    };
-    let rt = tokio::runtime::Runtime::new().unwrap();
-    rt.block_on(test);
+    let gh_issue = Issue::new(
+        None,
+        "mitodl",
+        "ol-infrastructure",
+        None,
+        None,
+        None,
+        Some(vec![String::from("pdpinch")]),
+        None,
+        None,
+        None,
+        None,
+        Some("closed"),
+        Some(3),
+    );
+    let issue = gh_issue.main(Action::List).await;
+    assert_eq!(
+        issue.unwrap().number,
+        833,
+        "single issue #833 from multiple listed from mitodl/ol-infrastructure not returned correctly",
+    );
 }
 
-#[test]
-fn test_errors() {
+#[tokio::test]
+async fn test_errors() {
     // validate errors
-    let test = async {
-        let gh_issue = Issue::new(
-            None,
-            "mitodl",
-            "ol-infrastructure",
-            None,
-            None,
-            None,
-            Some(vec![String::from("foo"), String::from("bar")]),
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-        );
-        let gh_issue_four = Issue::new(
-            None,
-            "mitodl",
-            "ol-infrastructure",
-            None,
-            None,
-            None,
-            Some(vec![String::from("blarghmatey")]),
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-        );
-        // validate title required for create error
-        let issue = gh_issue.main(Action::Create).await;
-        assert_eq!(
-            issue,
-            Err("title unspecified"),
-            "attempted create without specified title did not error expectedly",
-        );
-        // validate issue number required for read
-        let issue_two = gh_issue.main(Action::Read).await;
-        assert_eq!(
-            issue_two,
-            Err("issue number unspecified"),
-            "attempted read without specified number did not error expectedly",
-        );
-        // validate only one assignee for list
-        let issue_three = gh_issue.main(Action::List).await;
-        assert_eq!(
-            issue_three,
-            Err("multiple assignees and list action"),
-            "attempted list with multiple assignees did not error expectedly",
-        );
-        // validate only one issue returned for list
-        let issue_four = gh_issue_four.main(Action::List).await;
-        assert_eq!(
-            issue_four,
-            Err("unexpected number of issues"),
-            "attempted list with multiple issues returned did not error expectedly",
-        );
-        // validate issue number required for update
-        let issue_five = gh_issue.main(Action::Update).await;
-        assert_eq!(
-            issue_five,
-            Err("issue number unspecified"),
-            "attempted update without specified number did not error expectedly",
-        );
-    };
-    let rt = tokio::runtime::Runtime::new().unwrap();
-    rt.block_on(test);
+    let gh_issue = Issue::new(
+        None,
+        "mitodl",
+        "ol-infrastructure",
+        None,
+        None,
+        None,
+        Some(vec![String::from("foo"), String::from("bar")]),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+    );
+    let gh_issue_four = Issue::new(
+        None,
+        "mitodl",
+        "ol-infrastructure",
+        None,
+        None,
+        None,
+        Some(vec![String::from("blarghmatey")]),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+    );
+    // validate title required for create error
+    let issue = gh_issue.main(Action::Create).await;
+    assert_eq!(
+        issue,
+        Err("title unspecified"),
+        "attempted create without specified title did not error expectedly",
+    );
+    // validate issue number required for read
+    let issue_two = gh_issue.main(Action::Read).await;
+    assert_eq!(
+        issue_two,
+        Err("issue number unspecified"),
+        "attempted read without specified number did not error expectedly",
+    );
+    // validate only one assignee for list
+    let issue_three = gh_issue.main(Action::List).await;
+    assert_eq!(
+        issue_three,
+        Err("multiple assignees and list action"),
+        "attempted list with multiple assignees did not error expectedly",
+    );
+    // validate only one issue returned for list
+    let issue_four = gh_issue_four.main(Action::List).await;
+    assert_eq!(
+        issue_four,
+        Err("unexpected number of issues"),
+        "attempted list with multiple issues returned did not error expectedly",
+    );
+    // validate issue number required for update
+    let issue_five = gh_issue.main(Action::Update).await;
+    assert_eq!(
+        issue_five,
+        Err("issue number unspecified"),
+        "attempted update without specified number did not error expectedly",
+    );
 }
