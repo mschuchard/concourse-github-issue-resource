@@ -1,5 +1,6 @@
 ### 1.3.1 (Next)
 - Fix unconditional `milestone` assignment during issue creation.
+- Return actual `IssueState` as Concourse Version when single length vector.
 
 ### 1.3.0
 - Add issue lock/unlock functionality.

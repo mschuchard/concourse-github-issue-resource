@@ -89,7 +89,7 @@ impl concourse_resource::Resource for GithubIssue {
                 concourse::Version::new(IssueState::Closed),
             ]
         } else {
-            vec![concourse::Version::new(IssueState::Open)]
+            vec![concourse::Version::new(issue.state)]
         }
     }
 
@@ -189,7 +189,7 @@ impl concourse_resource::Resource for GithubIssue {
 
         // return out step output
         concourse_resource::OutOutput {
-            version: concourse::Version::new(IssueState::Open),
+            version: concourse::Version::new(issue.state.clone()),
             metadata: Some(concourse::OutMetadata::new(
                 issue.number,
                 issue.url,
