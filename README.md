@@ -47,7 +47,7 @@ version:
 
 ### `check`: returns size two list for closed Github issues and size one list for open Github issues
 
-The `check` step determines the state of the specified Github issue. If the state is `closed` (default behavior; otherwise `trigger` source parameter value) then the returned list of versions is size two. If the state is `open` (default behavior; otherwise NOT `trigger` source parameter value) then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`closed` triggers and `open` does not trigger by default; otherwise customized by `trigger` source parameter value) because it simulates a delta of versions for `closed` and not `open` (default). The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
+The `check` step determines the state of the specified Github issue. If the state is equal to the `trigger` source parameter value (default: `closed`) then the returned list of versions is size two. If the state is not equal to the `trigger` source parameter value (default: `open`) then the returned list of versions is size one. This is specifically to trigger pipelines based on the issue state (`closed` triggers and `open` does not trigger by default; otherwise customized by `trigger` source parameter value) because it simulates a delta of versions for the `trigger` source parameter value. The actual returns are the following (note the states' serialization is implemented by Octocrab to be lowercase strings):
 
 trigger:
 ```json
