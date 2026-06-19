@@ -56,7 +56,7 @@ trigger:
 
 no trigger:
 ```json
-[{"state":"open"}]
+[{"state":"<actual issue state>"}]
 ```
 
 ### `in`: currently unused

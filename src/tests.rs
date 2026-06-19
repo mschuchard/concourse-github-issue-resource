@@ -64,7 +64,9 @@ fn test_resource_check_list() {
     // the issue is closed and trigger is open so we expect a size one vec
     assert_eq!(
         version_vec,
-        vec![concourse::Version::new(octocrab::models::IssueState::Open)],
+        vec![concourse::Version::new(
+            octocrab::models::IssueState::Closed
+        )],
         "the resource_check did not return a one size vector of issue states for an issue with differing trigger and state",
     );
 }
@@ -104,6 +106,30 @@ fn test_resource_check_skip() {
 }
 
 #[test]
+#[should_panic(
+    expected = "the check step was unable to return a github issue from the source values"
+)]
+fn test_resource_check_unknown_issue() {
+    let source_input = r#"
+{
+    "owner": "mitodl",
+    "repo": "ol-infrastructure"
+}"#;
+    let version_input = r#"
+{
+    "state": "open"
+}"#;
+    let source =
+        serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Source>(source_input)
+            .expect("source could not be deserialized");
+    let version = serde_json::from_str::<<GithubIssue as concourse_resource::Resource>::Version>(
+        version_input,
+    )
+    .expect("version could not be deserialized");
+    GithubIssue::resource_check(Some(source), Some(version));
+}
+
+#[test]
 fn test_resource_in() {
     let in_output = GithubIssue::resource_in(
         None,
@@ -117,4 +143,10 @@ fn test_resource_in() {
         concourse::Version::new(octocrab::models::IssueState::Open),
         "the resource in did not dummy the expected return version output",
     );
+}
+
+#[test]
+#[should_panic(expected = "source is required for the Github Issue resource")]
+fn test_resource_in_missing_params() {
+    GithubIssue::resource_out(None, None, "");
 }
