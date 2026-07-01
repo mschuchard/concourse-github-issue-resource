@@ -306,29 +306,18 @@ impl<'issue> Issue<'issue> {
         match self.number {
             // issue number specified
             Some(number) => {
-                // first lock or unlock the issue if specified
-                if let Some(lock) = self.lock {
-                    if lock {
-                        match issues.lock(number, LockReason::Resolved).await {
-                            Ok(_) => log::info!("issue number {number} locked as Resolved"),
-                            Err(error) => {
-                                log::error!("the issue number {number} could not be locked");
-                                log::error!("{error}");
-                                return Err("issue not locked");
-                            }
-                        }
-                    } else {
-                        match issues.unlock(number).await {
-                            Ok(_) => log::info!("issue number {number} unlocked"),
-                            Err(error) => {
-                                log::error!("the issue number {number} could not be unlocked");
-                                log::error!("{error}");
-                                return Err("issue not unlocked");
-                            }
+                // unlock first if specified in case a comment is also specified
+                if self.lock == Some(false) {
+                    match issues.unlock(number).await {
+                        Ok(_) => log::info!("issue number {number} unlocked"),
+                        Err(error) => {
+                            log::error!("the issue number {number} could not be unlocked");
+                            log::error!("{error}");
+                            return Err("issue not unlocked");
                         }
                     }
                 }
-                // then create a comment if specified
+                // then create a comment if specified before potentially locking
                 if let Some(comment) = self.comment {
                     match issues.create_comment(number, comment).await {
                         Ok(_) => log::info!("comment added to issue number {number}"),
@@ -339,6 +328,18 @@ impl<'issue> Issue<'issue> {
                         }
                     }
                 }
+                // then lock if specified after potentially adding a comment
+                if self.lock == Some(true) {
+                    match issues.lock(number, LockReason::Resolved).await {
+                        Ok(_) => log::info!("issue number {number} locked as Resolved"),
+                        Err(error) => {
+                            log::error!("the issue number {number} could not be locked");
+                            log::error!("{error}");
+                            return Err("issue not locked");
+                        }
+                    }
+                }
+
                 // build the issue
                 let mut issue = issues.update(number);
                 // ... with optional parameters
