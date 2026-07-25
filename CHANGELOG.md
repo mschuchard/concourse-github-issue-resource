@@ -1,4 +1,4 @@
-### 1.3.1 (Next)
+### 1.3.1
 - Fix unconditional `milestone` assignment during issue creation.
 - Return actual `IssueState` as Concourse Version when single length vector.
 - Ensure adding a comment to an issue occurs before locking an issue.

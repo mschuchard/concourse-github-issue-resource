@@ -81,9 +81,9 @@ The metadata output from this step contains the number, url, title, state, label
 
 - `milestone`: _optional_ The milestone numeric ID to associate with the written Github issue.
 
-- `comment`: _optional_ The body of a comment to add to the issue. This occurs after the locking or unlocking, but before all other issue updates.
+- `comment`: _optional_ The body of a comment to add to the issue. This occurs after the unlocking, but before all other issue updates.
 
-- `lock`: _optional_ Whether the issue should be locked or unlocked. This occurs before all other issue updates. The reason will be `Resolved`.
+- `lock`: _optional_ Whether the issue should be locked or unlocked. The unlocking occurs before all other issue updates, and the locking occurs before all other issue updates except adding a comment. The reason will be `Resolved`.
 
 - `state`: _optional_ The desired state of the updated issue. This can be either `open` or `closed`.
 
