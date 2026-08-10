@@ -117,7 +117,7 @@ impl<'issue> Issue<'issue> {
     /// ```
     /// let issue = gh_issue.main(Action::Read).await?;
     /// ```
-    pub(super) async fn main<'octo>(
+    pub(super) async fn main(
         &self,
         action: Action,
     ) -> Result<octocrab::models::issues::Issue, &str> {
@@ -187,14 +187,14 @@ impl<'issue> Issue<'issue> {
                     Err(error) => {
                         log::error!("the issue could not be created");
                         log::error!("{error}");
-                        return Err("issue not created");
+                        Err("issue not created")
                     }
                 }
             }
             // title unspecified
             None => {
                 log::error!("a title was not specified, and so an issue could not be created");
-                return Err("title unspecified");
+                Err("title unspecified")
             }
         }
     }
@@ -218,7 +218,7 @@ impl<'issue> Issue<'issue> {
                             "the issue number {number} could not be retrieved from the repository"
                         );
                         log::error!("{error}");
-                        return Err("unknown issue");
+                        Err("unknown issue")
                     }
                 }
             }
@@ -227,7 +227,7 @@ impl<'issue> Issue<'issue> {
                 log::error!(
                     "an issue number was not specified, and so its state cannot be retrieved"
                 );
-                return Err("issue number unspecified");
+                Err("issue number unspecified")
             }
         }
     }
@@ -292,7 +292,7 @@ impl<'issue> Issue<'issue> {
                 let num = vec_issues.len();
                 log::error!("expected only one issue to be returned from filtered list");
                 log::error!("actual number of issues returned was {num}");
-                return Err("unexpected number of issues");
+                Err("unexpected number of issues")
             }
         }
     }
@@ -373,7 +373,7 @@ impl<'issue> Issue<'issue> {
                     Err(error) => {
                         log::error!("the issue number {number} could not be updated");
                         log::error!("{error}");
-                        return Err("issue not updated");
+                        Err("issue not updated")
                     }
                 }
             }
@@ -382,7 +382,7 @@ impl<'issue> Issue<'issue> {
                 log::error!(
                     "an issue number was not specified, and so an issue could not be updated"
                 );
-                return Err("issue number unspecified");
+                Err("issue number unspecified")
             }
         }
     }
