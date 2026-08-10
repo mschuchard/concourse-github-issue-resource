@@ -68,7 +68,6 @@ fn test_issue_new() {
             comment: None,
             lock: None,
             state: None,
-            //params_state: None,
             milestone: None
         },
         "failed to construct Issue for read"
@@ -104,7 +103,6 @@ fn test_issue_new() {
             comment: None,
             lock: None,
             state: None,
-            //params_state: None,
             milestone: None
         },
         "failed to construct Issue for create"
@@ -140,7 +138,6 @@ fn test_issue_new() {
             comment: Some("good comment"),
             lock: Some(true),
             state: Some("closed"),
-            //params_state: None,
             milestone: Some(12),
         },
         "failed to construct Issue for update"
@@ -176,7 +173,6 @@ fn test_issue_new() {
             comment: None,
             lock: None,
             state: Some("open"),
-            //params_state: None,
             milestone: Some(5),
         },
         "failed to construct Issue for list"

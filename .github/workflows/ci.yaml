@@ -5,13 +5,11 @@ on:
   push:
     branches: [master]
     paths:
-    - 'src/*.rs'
-    - 'Cargo.toml'
+    - '**.rs'
   pull_request:
     branches: [master]
     paths:
-    - 'src/*.rs'
-    - 'Cargo.toml'
+    - '**.rs'
 
 jobs:
   rust-test:

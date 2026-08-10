@@ -147,6 +147,6 @@ fn test_resource_in() {
 
 #[test]
 #[should_panic(expected = "source is required for the Github Issue resource")]
-fn test_resource_in_missing_params() {
+fn test_resource_out_missing_params() {
     GithubIssue::resource_out(None, None, "");
 }
