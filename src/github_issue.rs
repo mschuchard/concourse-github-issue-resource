@@ -1,9 +1,6 @@
 //! # Github Issue
 //!
 //! `github_issue` is a minimal utility to create and update issues within Github.
-use log;
-
-use octocrab;
 use octocrab::models::IssueState;
 use octocrab::params::LockReason;
 use octocrab::params::State;

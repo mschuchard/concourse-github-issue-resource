@@ -4,7 +4,6 @@
 use serde::{Deserialize, Serialize};
 
 use concourse_resource::IntoMetadataKV;
-use octocrab;
 use octocrab::models::IssueState;
 
 // standard concourse structs
@@ -67,10 +66,7 @@ impl Source {
     }
     pub(super) fn assignee(&self) -> Option<Vec<String>> {
         // convert assignee to single element string vector for compatibility with github issue constructor
-        match self.assignee.clone() {
-            Some(assignee) => Some(vec![assignee]),
-            None => None,
-        }
+        self.assignee.clone().map(|assignee| vec![assignee])
     }
     pub(super) fn creator(&self) -> Option<&str> {
         self.creator.as_deref()

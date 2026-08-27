@@ -1,6 +1,3 @@
-use env_logger;
-use log;
-
 use concourse_resource::*;
 use octocrab::models::IssueState;
 
