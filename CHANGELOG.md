@@ -1,3 +1,6 @@
+### 1.3.2 (Next)
+- Minor code optimization.
+
 ### 1.3.1
 - Fix unconditional `milestone` assignment during issue creation.
 - Return actual `IssueState` as Concourse Version when single length vector.
