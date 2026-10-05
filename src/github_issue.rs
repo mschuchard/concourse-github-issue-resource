@@ -26,11 +26,10 @@ fn str_to_issue_state(param: &str) -> Result<IssueState, &str> {
         "open" => Ok(IssueState::Open),
         "closed" => Ok(IssueState::Closed),
         "all" => {
-            log::warn!(
-                "all was specified for issue state, and this can only be utilized with issue filtering, and not updating"
+            log::error!(
+                "'all' was specified for issue state, and this can only be utilized with issue filtering, and not updating"
             );
-            log::warn!("the issue state will be reset to 'open'");
-            Ok(IssueState::Open)
+            Err("the issue state must be either open or closed")
         }
         &_ => Err("the issue state must be either open or closed"),
     }

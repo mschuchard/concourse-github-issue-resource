@@ -21,6 +21,12 @@ fn test_str_to_issue_state() {
         Ok(octocrab::models::IssueState::Closed),
         "failed to convert closed str to closed enum"
     );
+
+    assert_eq!(
+        str_to_issue_state("all"),
+        Err("the issue state must be either open or closed"),
+        "failed to error on all str to issue state conversion"
+    );
 }
 #[test]
 fn test_str_to_params_state() {

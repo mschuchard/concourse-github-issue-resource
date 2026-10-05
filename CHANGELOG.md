@@ -1,5 +1,6 @@
 ### 1.3.2 (Next)
 - Minor code optimization.
+- Error on `all` issue state during `update` instead of warning.
 
 ### 1.3.1
 - Fix unconditional `milestone` assignment during issue creation.
