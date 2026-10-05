@@ -114,11 +114,11 @@ Octocrab doc links for model serialization:
 
 ```yaml
 resource_types:
-- name: github_issue
+- name: github-issue
   type: docker-image
   source:
-    repository: matthewschuchard/concourse-github-issue-resource:1.3
-    tag: latest
+    repository: matthewschuchard/concourse-github-issue-resource
+    tag: 1.3
 
 resources:
 - name: github-issue
