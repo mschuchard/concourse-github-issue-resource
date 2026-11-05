@@ -1,6 +1,7 @@
 ### 1.3.2 (Next)
 - Minor code optimization.
 - Error on `all` issue state during `update` instead of warning.
+- Filter pull requests from issue search results.
 
 ### 1.3.1
 - Fix unconditional `milestone` assignment during issue creation.

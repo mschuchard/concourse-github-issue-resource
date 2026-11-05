@@ -280,7 +280,12 @@ impl<'issue> Issue<'issue> {
             }
         };
         // items member is Page<T> into Vec<T> so we can iter
-        let vec_issues = page.items;
+        let vec_issues: Vec<_> = page
+            .items
+            .into_iter()
+            // also filter pull requests from the issues
+            .filter(|issue| issue.pull_request.is_none())
+            .collect();
         // ensure only one issue exists in octocrab::Page<octocrab::models::issues::Issue>
         match vec_issues.len() {
             1 => Ok(vec_issues[0].clone()),
