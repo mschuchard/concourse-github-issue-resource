@@ -2,6 +2,7 @@
 - Minor code optimization.
 - Error on `all` issue state during `update` instead of warning.
 - Filter pull requests from issue search results.
+- Logging level modified from "error" to "warn".
 
 ### 1.3.1
 - Fix unconditional `milestone` assignment during issue creation.

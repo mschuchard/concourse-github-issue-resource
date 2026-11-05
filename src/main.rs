@@ -1,4 +1,5 @@
 use concourse_resource::*;
+use env_logger::Env;
 use octocrab::models::IssueState;
 
 mod concourse;
@@ -23,7 +24,7 @@ impl concourse_resource::Resource for GithubIssue {
         _version: Option<Self::Version>,
     ) -> Vec<Self::Version> {
         // init logger
-        let _ = env_logger::try_init();
+        let _ = env_logger::try_init_from_env(Env::default().default_filter_or("warn"));
 
         // validate and unwrap source
         let source = source.expect("source is required for the Github Issue resource");
@@ -102,7 +103,7 @@ impl concourse_resource::Resource for GithubIssue {
         Box<dyn std::error::Error>,
     > {
         // init logger
-        let _ = env_logger::try_init();
+        let _ = env_logger::try_init_from_env(Env::default().default_filter_or("warn"));
 
         log::info!(
             "reminder: the in step is only to be used for an efficient check step with minimal overhead"
@@ -124,7 +125,7 @@ impl concourse_resource::Resource for GithubIssue {
         input_path: &str,
     ) -> concourse_resource::OutOutput<Self::Version, Self::OutMetadata> {
         // init logger
-        let _ = env_logger::try_init();
+        let _ = env_logger::try_init_from_env(Env::default().default_filter_or("warn"));
 
         // validate source and params
         let source = source.expect("source is required for the Github Issue resource");

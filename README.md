@@ -124,7 +124,7 @@ resources:
 - name: github-issue
   type: github-issue
   source:
-    pat: abcdefg12345!
+    pat: ((github_pat))
     owner: mitodl
     repo: ol-infrastructure
     skip_check: true
@@ -149,7 +149,7 @@ jobs:
         assignees:
         - my_user
         - your_user
-  - get: githhub-issue-check
+  - get: github-issue-check
 ```
 
 ## Contributing
