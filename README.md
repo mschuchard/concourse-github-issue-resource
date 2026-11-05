@@ -115,7 +115,7 @@ Octocrab doc links for model serialization:
 ```yaml
 resource_types:
 - name: github-issue
-  type: docker-image
+  type: registry-image
   source:
     repository: matthewschuchard/concourse-github-issue-resource
     tag: 1.3

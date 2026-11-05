@@ -153,6 +153,12 @@ impl<'issue> Issue<'issue> {
         &self,
         issues: octocrab::issues::IssueHandler<'octo>,
     ) -> Result<octocrab::models::issues::Issue, &str> {
+        // warn if update parameters were specified
+        if self.comment.is_some() || self.lock.is_some() || self.state.is_some() {
+            log::warn!(
+                "comment, lock, and/or state parameters were specified for the issue creation, and these will be ignored"
+            );
+        }
         // validate a title was specified
         match self.title {
             // title specified
